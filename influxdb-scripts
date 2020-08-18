@@ -1,0 +1,3 @@
+CREATE RETENTION POLICY "sprint_length" ON "jira-metrics" DURATION 14d REPLICATION 1 DEFAULT
+
+CREATE CONTINUOUS QUERY "cq_daily_task_stats" ON "jira-metrics" BEGIN SELECT last("value") AS "value" INTO "jira-metrics"."autogen"."task_states_daily" FROM "jira-metrics"."sprint_length"."task_states" GROUP BY time(1d), * END
