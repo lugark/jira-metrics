@@ -25,8 +25,6 @@ class StatsByType implements \App\JiraStatistics\Mapper\MapperInterface
             );
         }
 
-        foreach ($sprintStatistics->getIssueCountByTypeAndState() as $type => $stat) {
-        }
         return $points;
     }
 }

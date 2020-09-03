@@ -18,13 +18,18 @@ class StatsByBoardStatus implements MapperInterface, InfluxDBMapperInterface
     public function mapStatistics(SprintStatistics $sprintStatistics): array
     {
         $points = [];
+        foreach ($sprintStatistics->getCountsByBoardColumns() as $state => $count) {
             $points[] = new Point(
                 $this->measurement,
-                null,
-                ['sprint' => $sprintStatistics->getSprintName()],
-                $sprintStatistics->getCountsByBoardColumns(),
+                $count,
+                [
+                    'sprint' => $sprintStatistics->getSprintName(),
+                    'state' => $state
+                ],
+                [],
                 time()
             );
+        }
         return $points;
     }
 }
