@@ -13,9 +13,10 @@ class IssueAggregation
     /** @var SprintService  */
     protected $sprintService;
 
-    public function __construct(SprintService $sprintService)
+    public function __construct(SprintService $sprintService, BoardConfigurationService $boardConfigurationService)
     {
         $this->sprintService = $sprintService;
+        $this->boardConfigService = $boardConfigurationService;
     }
 
     public function getTicketStatisticsBySprint(int $sprintId, array $queryParams, bool $subtaskInTypeStats=false)
@@ -60,7 +61,16 @@ class IssueAggregation
         return $parent->fields->issuetype->name;
     }
 
-    public function getSprintTicketStats(
+    private function getBoardColumnMapping(int $boardId)
+    {
+        $config = $this->boardConfigService->getBoardConfig($boardId);
+        if (!empty(($config))) {
+            return $config->columnConfig;
+        }
+        return [];
+    }
+
+    public function getSprintTicketStatistics(
         Sprint $sprint,
         array $queryParams,
         bool $subtaskInTypeStats=false
@@ -73,19 +83,22 @@ class IssueAggregation
             $queryParams
         );
 
+        $boardColumnMapping = $this->boardConfigService->getBoardColumnMapping($sprint->originBoardId);
+
         /** @var SprintStatistics $issueStats */
-        $issueStats = new SprintStatistics($sprint);
+        $issueStats = new SprintStatistics($sprint, $boardColumnMapping);
+
         /** @var Issue $issue */
         foreach ($this->sprintService->getSprintIssues($sprint->id, $queryOptions) as $issue) {
             if ($issue->fields->issuetype->subtask && !$subtaskInTypeStats) {
                 continue;
             }
-
             $issueStats->addIssueStatistic(
                 new IssueStatistic(
                     $issue->id,
                     $issue->fields->issuetype->name,
                     $issue->fields->status->name,
+                    $issue->fields->status->id,
                     $issue->fields->created
                 )
             );

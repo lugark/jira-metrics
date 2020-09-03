@@ -2,6 +2,7 @@
 
 namespace App\JiraStatistics;
 
+use App\Jira\Board\Configuration\ColumnConfig;
 use JiraRestApi\Sprint\Sprint;
 
 class SprintStatistics
@@ -12,10 +13,24 @@ class SprintStatistics
     /** @var Sprint */
     private $sprint;
 
-    public function __construct(Sprint $sprint, array $issueData=[])
+    private $boardColumnMapping;
+
+    public function __construct(Sprint $sprint, array $boardColumnMapping=[], array $issueData=[])
     {
         $this->sprint = $sprint;
+        $this->boardColumnMapping = $this->flipBoardColumnMapping($boardColumnMapping);
         $this->issueData = $issueData;
+    }
+
+    private function flipBoardColumnMapping(array $boardColumnMapping)
+    {
+        $fliped = [];
+        foreach ($boardColumnMapping as $name => $ids) {
+            foreach ($ids as $id) {
+                $fliped[$id] = $name;
+            }
+        }
+        return $fliped;
     }
 
     public function addIssueStatistic(IssueStatistic $issueStatistic)
@@ -76,5 +91,19 @@ class SprintStatistics
     public function getSprintGoal(): string
     {
         return $this->sprint->goal;
+    }
+
+    public function getCountsByBoardColumns(): array
+    {
+        $counts = [];
+        foreach (array_unique($this->boardColumnMapping) as $column) {
+            $counts[$column] = 0;
+        }
+
+        foreach ($this->issueData as $statistic) {
+            $counts[$this->boardColumnMapping[$statistic->statusId]]++;
+        }
+
+        return $counts;
     }
 }

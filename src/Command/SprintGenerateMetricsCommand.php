@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\JiraStatistics\Mapper\InfluxDB\StatsByBoardStatus;
 use App\JiraStatistics\Mapper\InfluxDB\StatsByStatus;
 use App\JiraStatistics\Output;
 use App\JiraStatistics\Writer\InfluxDBWriter;
@@ -33,6 +34,7 @@ class SprintGenerateMetricsCommand extends Command
 
         $this->statisticOutput = new Output($influxDbWriter);
         $this->statisticOutput->addStatisticsMapper(new StatsByStatus());
+        $this->statisticOutput->addStatisticsMapper(new StatsByBoardStatus());
 
         parent::__construct();
     }

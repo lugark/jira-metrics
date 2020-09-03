@@ -7,24 +7,24 @@ use InfluxDB\Point;
 
 class StatsByStatus implements \App\JiraStatistics\Mapper\MapperInterface
 {
-    const MEASUREMENT_TASK_STATUS = 'sprint_task_stats';
+    private $measurementTaskStatus = 'task_states';
+    private $measurementSprintTaskStatus = 'sprint_task_stats';
 
     public function mapStatistics(SprintStatistics $sprintStatistics): array
     {
         $points = [];
         foreach ($sprintStatistics->getIssueCountsByState() as $statusName => $count) {
             $points[] = new Point(
-                'task_states',
+                $this->measurementTaskStatus,
                 $count,
                 ['status-name' => $statusName],
                 [],
                 time()
             );
-
         }
 
         $points[] = new Point(
-            self::MEASUREMENT_TASK_STATUS,
+            $this->measurementSprintTaskStatus,
             null,
             ['sprint' => $sprintStatistics->getSprintName()],
             $sprintStatistics->getIssueCountsByState(),
