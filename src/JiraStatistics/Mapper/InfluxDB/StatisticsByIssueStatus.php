@@ -2,34 +2,31 @@
 
 namespace App\JiraStatistics\Mapper\InfluxDB;
 
+use App\JiraStatistics\Mapper\MapperInterface;
 use App\JiraStatistics\SprintStatistics;
 use InfluxDB\Point;
 
-class StatsByStatus implements \App\JiraStatistics\Mapper\MapperInterface
+class StatisticsByIssueStatus implements MapperInterface, InfluxDBMapperInterface
 {
-    private $measurementTaskStatus = 'task_states';
-    private $measurementSprintTaskStatus = 'sprint_task_stats';
+    use InfluxDBMapperTrait;
+
+    public function __construct()
+    {
+        $this->measurement = 'sprint_state_stats';
+    }
 
     public function mapStatistics(SprintStatistics $sprintStatistics): array
     {
         $points = [];
         foreach ($sprintStatistics->getIssueCountsByState() as $statusName => $count) {
             $points[] = new Point(
-                $this->measurementTaskStatus,
+                $this->measurement,
                 $count,
                 ['status-name' => $statusName],
                 [],
                 time()
             );
         }
-
-        $points[] = new Point(
-            $this->measurementSprintTaskStatus,
-            null,
-            ['sprint' => $sprintStatistics->getSprintName()],
-            $sprintStatistics->getIssueCountsByState(),
-            strtotime('today')
-        );
 
         return $points;
     }

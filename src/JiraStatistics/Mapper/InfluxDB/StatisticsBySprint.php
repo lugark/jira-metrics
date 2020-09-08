@@ -2,21 +2,28 @@
 
 namespace App\JiraStatistics\Mapper\InfluxDB;
 
+use App\JiraStatistics\Mapper\MapperInterface;
 use App\JiraStatistics\SprintStatistics;
 use InfluxDB\Point;
 
-class StatsBySprint implements \App\JiraStatistics\Mapper\MapperInterface
+class StatisticsBySprint implements MapperInterface, InfluxDBMapperInterface
 {
-    const MEASUREMENT_SPRINT_STATS = 'sprint_stats';
+    use InfluxDBMapperTrait;
+
+    public function __construct()
+    {
+        $this->measurement = 'sprint_stats';
+    }
 
     public function mapStatistics(SprintStatistics $sprintStatistics): array
     {
         return [new Point(
-            self::MEASUREMENT_SPRINT_STATS,
+            $this->measurement,
             null,
             ['sprint-name' => $sprintStatistics->getSprintName()],
             [
                 'sprint-goal' => $sprintStatistics->getSprintGoal(),
+                #TODO: add more numbers - total tasks - done / not done - number types of tasks
                 'tasks-start' => 0,
                 'tasks-end' => 0,
             ],

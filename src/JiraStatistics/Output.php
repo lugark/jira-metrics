@@ -23,20 +23,10 @@ class Output
         $this->writer[] = $writer;
     }
 
-    public function addStatisticsMapper(MapperInterface $mapper)
-    {
-        $this->mapper[]= $mapper;
-    }
-
     public function output(SprintStatistics $statistics)
     {
-        $mappedData = [];
-        foreach ($this->mapper as $mapper) {
-            $mappedData = array_merge($mappedData, $mapper->mapStatistics($statistics));
-        }
-
         foreach ($this->writer as $writer) {
-            $writer->writeData($mappedData);
+            $writer->writeData($statistics);
         }
     }
 

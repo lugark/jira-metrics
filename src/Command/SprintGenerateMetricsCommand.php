@@ -2,8 +2,9 @@
 
 namespace App\Command;
 
-use App\JiraStatistics\Mapper\InfluxDB\StatsByBoardStatus;
-use App\JiraStatistics\Mapper\InfluxDB\StatsByStatus;
+use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardStatus;
+use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardStatusDaily;
+use App\JiraStatistics\Mapper\InfluxDB\StatisticsByIssueStatus;
 use App\JiraStatistics\Output;
 use App\JiraStatistics\Writer\InfluxDBWriter;
 use App\Service\IssueAggregation;
@@ -27,14 +28,17 @@ class SprintGenerateMetricsCommand extends Command
     /** @var BoardService */
     protected $boardService;
 
+    /** @var Output */
+    private $statisticOutput;
+
     public function __construct(IssueAggregation $issuesAggregation, InfluxDBWriter $influxDbWriter)
     {
         $this->issueAggregationService = $issuesAggregation;
         $this->boardService = new BoardService();
 
+        $influxDbWriter->addStatisticsMapper(new StatisticsByBoardStatus());
+        $influxDbWriter->addStatisticsMapper(new StatisticsByBoardStatusDaily());
         $this->statisticOutput = new Output($influxDbWriter);
-        $this->statisticOutput->addStatisticsMapper(new StatsByStatus());
-        $this->statisticOutput->addStatisticsMapper(new StatsByBoardStatus());
 
         parent::__construct();
     }

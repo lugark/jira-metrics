@@ -2,27 +2,45 @@
 
 namespace App\JiraStatistics\Writer;
 
+use App\JiraStatistics\Mapper\MapperAwareInterface;
+use App\JiraStatistics\Mapper\MapperAwareTrait;
+use App\JiraStatistics\SprintStatistics;
 use InfluxDB\Client;
 use InfluxDB\Database;
 
-class InfluxDBWriter implements WriterInterface
+class InfluxDBWriter implements WriterInterface, MapperAwareInterface
 {
+    use MapperAwareTrait;
+
     const DEFAULT_PRECISION = Database::PRECISION_SECONDS;
 
     /** @var Client */
-    private $client;
+    private $influxClient;
 
     /** @var Database */
     private $db;
 
-    public function __construct()
+    /** @var string */
+    private $dbName;
+
+    public function __construct(Client $client)
     {
-        $this->influxClient = new Client('localhost');
-        $this->db = $this->influxClient->selectDB('jira-metrics');
+        $this->influxClient = $client;
     }
 
-    public function writeData(array $statistics)
+    public function writeData(SprintStatistics $statistics)
     {
-        $this->db->writePoints($statistics, self::DEFAULT_PRECISION);
+        $mappedData = [];
+        foreach ($this->mapper as $mapper) {
+            $mappedData = array_merge($mappedData, $mapper->mapStatistics($statistics));
+        }
+
+        $this->db->writePoints($mappedData, self::DEFAULT_PRECISION);
+    }
+
+    public function setDbName(string $dbName): void
+    {
+        $this->dbName = $dbName;
+        $this->db = $this->influxClient->selectDB($this->dbName);
     }
 }

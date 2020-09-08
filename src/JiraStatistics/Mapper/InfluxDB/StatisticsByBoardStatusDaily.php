@@ -6,13 +6,13 @@ use App\JiraStatistics\Mapper\MapperInterface;
 use App\JiraStatistics\SprintStatistics;
 use InfluxDB\Point;
 
-class StatsByBoardStatus implements MapperInterface, InfluxDBMapperInterface
+class StatisticsByBoardStatusDaily implements MapperInterface, InfluxDBMapperInterface
 {
     use InfluxDBMapperTrait;
 
     public function __construct()
     {
-        $this->measurement = 'board_task_stats';
+        $this->measurement = 'board_task_stats_daily';
     }
 
     public function mapStatistics(SprintStatistics $sprintStatistics): array
@@ -27,7 +27,7 @@ class StatsByBoardStatus implements MapperInterface, InfluxDBMapperInterface
                     'state' => $state
                 ],
                 [],
-                time()
+                strtotime('today')
             );
         }
         return $points;

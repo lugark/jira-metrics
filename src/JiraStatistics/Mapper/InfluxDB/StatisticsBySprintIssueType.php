@@ -2,19 +2,25 @@
 
 namespace App\JiraStatistics\Mapper\InfluxDB;
 
+use App\JiraStatistics\Mapper\MapperInterface;
 use App\JiraStatistics\SprintStatistics;
 use InfluxDB\Point;
 
-class StatsByType implements \App\JiraStatistics\Mapper\MapperInterface
+class StatisticsBySprintIssueType implements MapperInterface, InfluxDBMapperInterface
 {
-    const MEASUREMENT_TYPE_STATS = 'sprint_type_stats';
+    use InfluxDBMapperTrait;
+
+    public function __construct()
+    {
+        $this->measurement = 'sprint_issue_stats';
+    }
 
     public function mapStatistics(SprintStatistics $sprintStatistics): array
     {
         $points = [];
         foreach ($sprintStatistics->getIssueCountsByType() as $type => $count) {
             $points[] = new Point(
-                self::MEASUREMENT_TYPE_STATS,
+                $this->measurement,
                 $count,
                 [
                     'sprint-name' => $sprintStatistics->getSprintName(),

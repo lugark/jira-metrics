@@ -28,3 +28,14 @@ services:
 
     JiraRestApi\Sprint\SprintService:
         tags: ['jira.sprintservice']
+
+    InfluxDB\Client:
+        class: InfluxDB\Client
+        arguments:
+            - '%env(INFLUXDB_HOST)%'
+
+    App\JiraStatistics\Writer\InfluxDBWriter:
+        class: App\JiraStatistics\Writer\InfluxDBWriter
+        calls:
+            - [setDbName, ['%env(INFLUXDB_NAME)%']]
+        shared: false

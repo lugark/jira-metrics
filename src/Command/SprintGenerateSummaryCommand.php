@@ -2,8 +2,8 @@
 
 namespace App\Command;
 
-use App\JiraStatistics\Mapper\InfluxDB\StatsBySprint;
-use App\JiraStatistics\Mapper\InfluxDB\StatsByType;
+use App\JiraStatistics\Mapper\InfluxDB\StatisticsBySprint;
+use App\JiraStatistics\Mapper\InfluxDB\StatisticsBySprintIssueType;
 use App\JiraStatistics\Writer\InfluxDBWriter;
 use App\JiraStatistics\Output;
 use App\Service\IssueAggregation;
@@ -22,7 +22,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class SprintGenerateSummaryCommand extends Command
 {
-    protected static $defaultName = 'jira:sprint:generate:summary';
+    protected static $defaultName = 'jira:sprint:generate:sprint-stats';
 
     /** @var IssueAggregation */
     protected $issueAggregationService;
@@ -37,11 +37,10 @@ class SprintGenerateSummaryCommand extends Command
     {
         $this->issueAggregationService = $issuesAggregation;
         $this->boardService = new BoardService();
-        $this->influxClient = new Client('localhost');
 
+        $influxDbWriter->addStatisticsMapper(new StatisticsBySprintIssueType());
+        $influxDbWriter->addStatisticsMapper(new StatisticsBySprint());
         $this->statisticOutput = new Output($influxDbWriter);
-        $this->statisticOutput->addStatisticsMapper(new StatsByType());
-        $this->statisticOutput->addStatisticsMapper(new StatsBySprint());
 
         parent::__construct();
     }
@@ -90,6 +89,7 @@ class SprintGenerateSummaryCommand extends Command
 
         $this->statisticOutput->output($issueStatistics);
 
+        $style->success('Done creating statistic summary for the sprint');
         return 0;
     }
 }
