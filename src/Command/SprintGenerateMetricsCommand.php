@@ -55,7 +55,13 @@ class SprintGenerateMetricsCommand extends Command
             'p',
             InputOption::VALUE_REQUIRED,
             'The project fetched tasks should belong to',
-            false);
+            false)
+        ->addOption(
+            'exclude',
+            'x',
+            InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+            'Exclude the listed issue types',
+            []);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -79,6 +85,10 @@ class SprintGenerateMetricsCommand extends Command
         $project = $input->getOption('project');
         if ($project !== false) {
             $queryOptions['jql'] = urlencode('project = ' . $project);
+        }
+        $excludeTypes = $input->getOption('exclude');
+        if (!empty($excludeTypes)){
+            $queryOptions['jql'] = urlencode('issuetype not in (' . implode($excludeTypes, ',') . ')');
         }
 
         $issueStatistics = $this->issueAggregationService->getSprintTicketStatistics(
