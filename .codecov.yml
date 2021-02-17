@@ -1,0 +1,11 @@
+coverage:
+  round: nearest
+  precision: 0
+
+comment: off
+
+ignore:
+  - "public"
+  - "tests"
+  - "vendor"
+  - "src/Kernel.php"

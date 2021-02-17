@@ -1,0 +1,78 @@
+{
+  "id": 1648,
+  "name": "Team Aviation",
+  "type": "scrum",
+  "self": "https://jira.somejira.org/rest/agile/1.0/board/666/configuration",
+  "filter": {
+    "id": "22222",
+    "self": "https://jira.somejira.org/rest/api/2/filter/123"
+  },
+  "columnConfig": {
+    "columns": [
+      {
+        "name": "To Do",
+        "statuses": [
+          {
+            "id": "1122",
+            "self": "https://jira.somejira.org/rest/api/2/status/1122"
+          },
+          {
+            "id": "1123",
+            "self": "https://jira.somejira.org/rest/api/2/status/1123"
+          },
+          {
+            "id": "1",
+            "self": "https://jira.somejira.org/rest/api/2/status/1"
+          }
+        ]
+      },
+      {
+        "name": "In Progress",
+        "statuses": [
+          {
+            "id": "3",
+            "self": "https://jira.somejira.org/rest/api/2/status/3"
+          }
+        ]
+      },
+      {
+        "name": "Test",
+        "statuses": [
+          {
+            "id": "1022",
+            "self": "https://jira.somejira.org/rest/api/2/status/1022"
+          }
+        ]
+      },
+      {
+        "name": "Release Ready",
+        "statuses": [
+          {
+            "id": "1023",
+            "self": "https://jira.somejira.org/rest/api/2/status/1023"
+          }
+        ]
+      },
+      {
+        "name": "Done",
+        "statuses": [
+          {
+            "id": "1100",
+            "self": "https://jira.somejira.org/rest/api/2/status/1100"
+          }
+        ]
+      }
+    ],
+    "constraintType": "issueCount"
+  },
+  "estimation": {
+    "type": "field",
+    "field": {
+      "fieldId": "customfield_12345",
+      "displayName": "Story Points"
+    }
+  },
+  "ranking": {
+    "rankCustomFieldId": 11003
+  }
+}

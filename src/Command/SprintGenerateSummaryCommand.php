@@ -4,8 +4,10 @@ namespace App\Command;
 
 use App\JiraStatistics\Mapper\InfluxDB\StatisticsBySprint;
 use App\JiraStatistics\Mapper\InfluxDB\StatisticsBySprintIssueType;
+use App\JiraStatistics\Mapper\MySQL\StatisticsBySprintMySQL;
 use App\JiraStatistics\Writer\InfluxDBWriter;
 use App\JiraStatistics\Output;
+use App\JiraStatistics\Writer\MysqlWriter;
 use App\Service\IssueAggregation;
 use InfluxDB\Client;
 use InfluxDB\Database;
@@ -33,14 +35,17 @@ class SprintGenerateSummaryCommand extends Command
     /** @var BoardService */
     protected $boardService;
 
-    public function __construct(IssueAggregation $issuesAggregation, InfluxDBWriter $influxDbWriter)
+    public function __construct(IssueAggregation $issuesAggregation, InfluxDBWriter $influxDbWriter, MysqlWriter  $mysqlWriter)
     {
         $this->issueAggregationService = $issuesAggregation;
         $this->boardService = new BoardService();
 
         $influxDbWriter->addStatisticsMapper(new StatisticsBySprintIssueType());
         $influxDbWriter->addStatisticsMapper(new StatisticsBySprint());
-        $this->statisticOutput = new Output($influxDbWriter);
+
+        $this->statisticOutput = new Output();
+        $this->statisticOutput->addWriter($influxDbWriter);
+        $this->statisticOutput->addWriter($mysqlWriter);
 
         parent::__construct();
     }

@@ -2,7 +2,6 @@
 
 namespace App\JiraStatistics;
 
-use App\JiraStatistics\Mapper\MapperInterface;
 use App\JiraStatistics\Writer\WriterInterface;
 
 class Output
@@ -10,12 +9,11 @@ class Output
     /** @var WriterInterface[] */
     private $writer;
 
-    /** @var MapperInterface[] */
-    private $mapper;
-
-    public function __construct(WriterInterface $writer)
+    public function __construct(WriterInterface $writer=null)
     {
-        $this->writer[]= $writer;
+        if (!empty($writer)) {
+            $this->writer[] = $writer;
+        }
     }
 
     public function addWriter(WriterInterface $writer)
@@ -29,5 +27,4 @@ class Output
             $writer->writeData($statistics);
         }
     }
-
 }

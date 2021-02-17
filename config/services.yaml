@@ -39,3 +39,13 @@ services:
         calls:
             - [setDbName, ['%env(INFLUXDB_NAME)%']]
         shared: false
+
+    mysql_writer.sprint_summary_command:
+        class: App\JiraStatistics\Writer\MysqlWriter
+        calls:
+            - [addStatisticsMapper, ['@App\JiraStatistics\Mapper\MySQL\SprintStatisticsMySQL']]
+
+    App\Command\SprintGenerateSummaryCommand:
+        class: App\Command\SprintGenerateSummaryCommand
+        arguments:
+            $mysqlWriter: '@mysql_writer.sprint_summary_command'

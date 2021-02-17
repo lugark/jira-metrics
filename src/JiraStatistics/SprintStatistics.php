@@ -106,4 +106,9 @@ class SprintStatistics
 
         return $counts;
     }
+
+    public function getSprintId(): int
+    {
+        return $this->sprint->id;
+    }
 }

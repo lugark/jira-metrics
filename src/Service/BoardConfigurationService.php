@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Jira\Board\Configuration;
+use App\Jira\Board\Configuration\ColumnConfig\Column\MappingStatus;
 use JiraRestApi\AgileApiTrait;
 use JiraRestApi\Configuration\ConfigurationInterface;
 use JiraRestApi\JiraClient;
@@ -34,7 +35,7 @@ class BoardConfigurationService extends JiraClient
         /** @var Configuration\ColumnConfig\Column $column */
         foreach ($config->columnConfig->columns as $column) {
             $columnMapping[$column->name] = [];
-            /** @var Configuration\ColumnConfig\MappingStatus $status */
+            /** @var MappingStatus $status */
             foreach ($column->statuses as $status) {
                 $columnMapping[$column->name][] = $status->id;
             }

@@ -1,0 +1,23 @@
+language: php
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+php:
+  - 7.4
+
+matrix:
+  fast_finish: true
+
+install:
+  - composer selfupdate
+  - composer install
+
+script:
+  - bin/phpunit  --coverage-clover coverage.xml --coverage-text
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
