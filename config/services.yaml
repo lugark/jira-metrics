@@ -28,6 +28,8 @@ services:
 
     JiraRestApi\Sprint\SprintService:
         tags: ['jira.sprintservice']
+    JiraRestApi\Board\BoardService:
+        tags: ['jira.boardservice']
 
     InfluxDB\Client:
         class: InfluxDB\Client

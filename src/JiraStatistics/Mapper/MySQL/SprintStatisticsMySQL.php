@@ -5,8 +5,8 @@ namespace App\JiraStatistics\Mapper\MySQL;
 use App\Entity\Sprint;
 use App\Entity\SprintIssueTypeStatistic;
 use App\Entity\SprintTypeStatistic;
+use App\JiraStatistics\IssueStatisticsInterface;
 use App\JiraStatistics\Mapper\MapperInterface;
-use \App\JiraStatistics\SprintStatistics;
 use App\Repository\SprintRepository;
 
 class SprintStatisticsMySQL implements MapperInterface, MySQLMapperInterface
@@ -21,7 +21,7 @@ class SprintStatisticsMySQL implements MapperInterface, MySQLMapperInterface
         $this->sprintRepository = $sprintRepository;
     }
 
-    public function mapStatistics(SprintStatistics $sprintStatistics): array
+    public function mapStatistics(IssueStatisticsInterface $sprintStatistics): array
     {
         $sprint = $this->sprintRepository->find($sprintStatistics->getSprintId());
         if (empty($sprint)) {
@@ -34,7 +34,7 @@ class SprintStatisticsMySQL implements MapperInterface, MySQLMapperInterface
 
         $totalCount = $this->setSprintIssueTypeStatistics($sprint, $sprintStatistics->getIssueCountsByType());
         $sprint->setIssueCount($totalCount);
-        
+
         return [$sprint];
     }
 

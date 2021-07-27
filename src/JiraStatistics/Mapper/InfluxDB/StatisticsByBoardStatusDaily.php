@@ -2,8 +2,8 @@
 
 namespace App\JiraStatistics\Mapper\InfluxDB;
 
+use App\JiraStatistics\IssueStatisticsInterface;
 use App\JiraStatistics\Mapper\MapperInterface;
-use App\JiraStatistics\SprintStatistics;
 use InfluxDB\Point;
 
 class StatisticsByBoardStatusDaily implements MapperInterface, InfluxDBMapperInterface
@@ -15,15 +15,15 @@ class StatisticsByBoardStatusDaily implements MapperInterface, InfluxDBMapperInt
         $this->measurement = 'board_task_stats_daily';
     }
 
-    public function mapStatistics(SprintStatistics $sprintStatistics): array
+    public function mapStatistics(IssueStatisticsInterface $issueStatistics): array
     {
         $points = [];
-        foreach ($sprintStatistics->getCountsByBoardColumns() as $state => $count) {
+        foreach ($issueStatistics->getCountsByBoardColumns() as $state => $count) {
             $points[] = new Point(
                 $this->measurement,
                 $count,
                 [
-                    'sprint' => $sprintStatistics->getSprintName(),
+                    'group_name' => $issueStatistics->getIssueGroupName(),
                     'state' => $state
                 ],
                 [],

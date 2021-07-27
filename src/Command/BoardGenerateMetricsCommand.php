@@ -6,8 +6,12 @@ use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardStatus;
 use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardStatusDaily;
 use App\JiraStatistics\Output;
 use App\JiraStatistics\Writer\InfluxDBWriter;
+use App\Service\BoardConfigurationService;
 use App\Service\IssueAggregation;
+use App\Service\JqlGeneration;
+use JiraRestApi\Board\Board;
 use JiraRestApi\Board\BoardService;
+use JiraRestApi\Issue\Issue;
 use JiraRestApi\Sprint\Sprint;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,16 +20,18 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class SprintGenerateMetricsCommand extends Command
+class BoardGenerateMetricsCommand extends Command
 {
     // the name of the command (the part after "bin/console")
-    protected static $defaultName = 'jira:sprint:generate:task-metrics';
+    protected static $defaultName = 'jira:board:generate:task-metrics';
 
     /** @var IssueAggregation */
     protected $issueAggregationService;
 
     /** @var BoardService */
     protected $boardService;
+
+    protected BoardConfigurationService $boardConfigService;
 
     /** @var Output */
     private $statisticOutput;
@@ -34,6 +40,7 @@ class SprintGenerateMetricsCommand extends Command
     {
         $this->issueAggregationService = $issuesAggregation;
         $this->boardService = new BoardService();
+        $this->boardConfigService = new BoardConfigurationService();
 
         $influxDbWriter->addStatisticsMapper(new StatisticsByBoardStatus());
         $influxDbWriter->addStatisticsMapper(new StatisticsByBoardStatusDaily());
@@ -65,34 +72,21 @@ class SprintGenerateMetricsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $boardConfig = $this->boardConfigService->getBoardConfig($input->getArgument('boardid'));
         $style = new SymfonyStyle($input, $output);
-        $style->title('Gathering metrics on Agile Board #' . $input->getArgument('boardid'));
-        $style->write('Getting active sprint board....');
-        $sprints = $this->boardService->getBoardSprints($input->getArgument('boardid'), ['state' => 'active']);
-        if ($sprints->count() === 0) {
-            $style->error('No active sprint board found!');
-            return 1;
-        }
+        $style->title('Gathering metrics on Board #' . $boardConfig->id);
+        $style->writeln('Parsing board configuration....');
 
-        /** @var Sprint $activeSprint */
-        $activeSprint = $sprints[0];
-        $style->writeln(
-            sprintf('Found "%s" (ID:%d)', $activeSprint->getName(), $activeSprint->id)
+        $jqlQueries = array_merge(
+            JqlGeneration::getJQlQueriesFromOptions($input->getOptions()),
+            JqlGeneration::getJQLQueriesFromBoardConfig($boardConfig),
+            ['status != Backlog']
         );
 
-        $queryOptions = [];
-        $project = $input->getOption('project');
-        if ($project !== false) {
-            $queryOptions['jql'] = urlencode('project = ' . $project);
-        }
-        $excludeTypes = $input->getOption('exclude');
-        if (!empty($excludeTypes)){
-            $queryOptions['jql'] = urlencode('issuetype not in (' . implode($excludeTypes, ',') . ')');
-        }
-
-        $issueStatistics = $this->issueAggregationService->getSprintTicketStatistics(
-            $activeSprint,
-            $queryOptions,
+        $style->writeln('Fetching Ticket Statistics....');
+        $issueStatistics = $this->issueAggregationService->getBoardTicketStatistics(
+            $boardConfig,
+            ['jql' => JqlGeneration::combineQueries($jqlQueries)],
             true
         );
 

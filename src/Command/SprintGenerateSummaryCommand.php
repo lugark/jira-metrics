@@ -2,19 +2,15 @@
 
 namespace App\Command;
 
-use App\JiraStatistics\Mapper\InfluxDB\StatisticsBySprint;
-use App\JiraStatistics\Mapper\InfluxDB\StatisticsBySprintIssueType;
-use App\JiraStatistics\Mapper\MySQL\StatisticsBySprintMySQL;
+use App\JiraStatistics\Mapper\InfluxDB\Sprint\StatisticsBySprint;
+use App\JiraStatistics\Mapper\InfluxDB\Sprint\StatisticsBySprintIssueType;
+use App\JiraStatistics\Mapper\MySQL\SprintStatisticsMySQL;
 use App\JiraStatistics\Writer\InfluxDBWriter;
 use App\JiraStatistics\Output;
 use App\JiraStatistics\Writer\MysqlWriter;
 use App\Service\IssueAggregation;
-use InfluxDB\Client;
-use InfluxDB\Database;
-use InfluxDB\Point;
 use JiraRestApi\Board\BoardService;
 use JiraRestApi\Sprint\Sprint;
-use JiraRestApi\Sprint\SprintService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

@@ -1,6 +1,8 @@
 <?php
 namespace App\Jira\Board;
 
+use App\Jira\Board\Configuration\Filter;
+use App\Jira\Board\Configuration\SubQuery;
 use JiraRestApi\ClassSerialize;
 
 class Configuration implements \JsonSerializable
@@ -19,6 +21,10 @@ class Configuration implements \JsonSerializable
     /** @var string */
     public $type;
 
+    public ?Filter $filter;
+
+    public ?SubQuery $subQuery;
+
     /** @var Configuration\ColumnConfig|null */
     public $columnConfig;
 
@@ -29,4 +35,13 @@ class Configuration implements \JsonSerializable
         });
     }
 
+    public function hasSubQuery(): bool
+    {
+        return !(empty($this->subQuery));
+    }
+
+    public function hasFilter(): bool
+    {
+        return !(empty($this->filter));
+    }
 }
