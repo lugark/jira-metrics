@@ -9,6 +9,7 @@ use App\JiraStatistics\Writer\InfluxDBWriter;
 use App\JiraStatistics\Output;
 use App\JiraStatistics\Writer\MysqlWriter;
 use App\Service\IssueAggregation;
+use App\Service\JqlGeneration;
 use JiraRestApi\Board\BoardService;
 use JiraRestApi\Sprint\Sprint;
 use Symfony\Component\Console\Command\Command;
@@ -64,7 +65,6 @@ class SprintGenerateSummaryCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $boardId = $input->getArgument('boardid');
-
         $style = new SymfonyStyle($input, $output);
         $style->title('Gathering sprint information on Agile Board #' . $boardId);
         $style->write('Getting active sprint board....');
@@ -77,15 +77,11 @@ class SprintGenerateSummaryCommand extends Command
         /** @var Sprint $activeSprint */
         $activeSprint = $sprints[0];
 
-        $queryOptions = [];
-        $project = $input->getOption('project');
-        if ($project !== false) {
-            $queryOptions['jql'] = urlencode('project = ' . $project);
-        }
+        $jqlQueries = JqlGeneration::getJQlQueriesFromOptions($input->getOptions());
 
         $issueStatistics = $this->issueAggregationService->getSprintTicketStatistics(
             $activeSprint,
-            $queryOptions
+            ['jql' => JqlGeneration::combineQueries($jqlQueries)],
         );
 
         $this->statisticOutput->output($issueStatistics);
