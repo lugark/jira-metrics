@@ -3,54 +3,51 @@
 namespace App\Service;
 
 use App\Jira\Board\Configuration;
+use JiraRestApi\Issue\JqlQuery;
 
 class JqlGeneration
 {
     const OPTIONS_PROJECT_KEY = 'project';
     const OPTIONS_EXCLUDE_KEY = 'exclude';
 
-    public static function getProjectCondition(string $project): string
+    public static function getJQlQueriesFromOptions(array $options, JqlQuery $jql=null): JqlQuery
     {
-        return empty($project) ? '' : 'project = ' . $project;
-    }
-
-    public static function getExcludeTypesCondition(array $types): string
-    {
-        return empty($types) ? '' : 'type not in (' . implode(',', $types) . ')';
-    }
-
-    public static function combineQueries(array $queries, bool $urlEncode = true): string
-    {
-        if (empty($queries)) {
-            return '';
+        if (empty($jql)) {
+            $jql = new JqlQuery();
         }
-        $queries = array_map(function ($str) { return sprintf("(%s)", $str); }, array_filter($queries));
-        $combined = implode(' AND ', $queries);
-        return $urlEncode ? urlencode($combined) : $combined;
-    }
 
-    public static function getJQlQueriesFromOptions(array $options): array
-    {
-        $queries = [];
         foreach ($options as $key => $option) {
+            if (empty($option)) continue;
+
             switch ($key) {
                 case self::OPTIONS_PROJECT_KEY:
-                    $queries[] = !$option ? '' : JqlGeneration::getProjectCondition($option[0]);
+                    $jql->addExpression(
+                        JqlQuery::FIELD_PROJECT,
+                        JqlQuery::OPERATOR_EQUALS, $option,
+                    );
                     break;
                 case self::OPTIONS_EXCLUDE_KEY:
-                    $queries[] = JqlGeneration::getExcludeTypesCondition($option);
+                    $jql->addInExpression(
+                        JqlQuery::FIELD_TYPE,
+                        $option
+                    );
                     break;
                 default:
                     break;
             }
         }
-
-        return $queries;
+        return $jql;
     }
 
-    public static function getJQLQueriesFromBoardConfig(Configuration $configuration): array
+    public static function getJQLQueryFromBoardConfig(Configuration $configuration, JqlQuery $jql=null): JqlQuery
     {
-        return $configuration->hasSubQuery() ? [$configuration->subQuery->query] : [];
+        if (empty($jql)) {
+            $jql = new JqlQuery();
+        }
+        if ($configuration->hasSubQuery()) {
+            $jql->addAnyExpression(JqlQuery::KEYWORD_AND . ' (' . $configuration->subQuery->query . ')');
+        }
+        return $jql;
     }
 }
 

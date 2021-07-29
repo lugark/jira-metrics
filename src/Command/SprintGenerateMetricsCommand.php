@@ -80,11 +80,11 @@ class SprintGenerateMetricsCommand extends Command
         $style->writeln(
             sprintf('Found "%s" (ID:%d)', $activeSprint->getName(), $activeSprint->id)
         );
-        $jqlQueries = JqlGeneration::getJQlQueriesFromOptions($input->getOptions());
+        $jql = JqlGeneration::getJQlQueriesFromOptions($input->getOptions());
 
         $issueStatistics = $this->issueAggregationService->getSprintTicketStatistics(
             $activeSprint,
-            ['jql' => JqlGeneration::combineQueries($jqlQueries)],
+            ['jql' => urlencode($jql->getQuery())],
             true
         );
 

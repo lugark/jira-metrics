@@ -12,6 +12,7 @@ use App\Service\JqlGeneration;
 use JiraRestApi\Board\Board;
 use JiraRestApi\Board\BoardService;
 use JiraRestApi\Issue\Issue;
+use JiraRestApi\Issue\JqlQuery;
 use JiraRestApi\Sprint\Sprint;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -77,16 +78,14 @@ class BoardGenerateMetricsCommand extends Command
         $style->title('Gathering metrics on Board #' . $boardConfig->id);
         $style->writeln('Parsing board configuration....');
 
-        $jqlQueries = array_merge(
-            JqlGeneration::getJQlQueriesFromOptions($input->getOptions()),
-            JqlGeneration::getJQLQueriesFromBoardConfig($boardConfig),
-            ['status != Backlog']
-        );
+        $jql = JqlGeneration::getJQlQueriesFromOptions($input->getOptions());
+        $jql = JqlGeneration::getJQLQueryFromBoardConfig($boardConfig, $jql);
+        $jql->addExpression(JqlQuery::FIELD_STATUS, JqlQuery::OPERATOR_NOT_EQUALS, 'Backlog');
 
         $style->writeln('Fetching Ticket Statistics....');
         $issueStatistics = $this->issueAggregationService->getBoardTicketStatistics(
             $boardConfig,
-            ['jql' => JqlGeneration::combineQueries($jqlQueries)],
+            ['jql' => urlencode($jql->getQuery())],
             true
         );
 
