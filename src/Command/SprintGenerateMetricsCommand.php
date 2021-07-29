@@ -7,6 +7,7 @@ use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardStatusDaily;
 use App\JiraStatistics\Output;
 use App\JiraStatistics\Writer\InfluxDBWriter;
 use App\Service\IssueAggregation;
+use App\Service\JqlGeneration;
 use JiraRestApi\Board\BoardService;
 use JiraRestApi\Sprint\Sprint;
 use Symfony\Component\Console\Command\Command;
@@ -79,20 +80,11 @@ class SprintGenerateMetricsCommand extends Command
         $style->writeln(
             sprintf('Found "%s" (ID:%d)', $activeSprint->getName(), $activeSprint->id)
         );
-
-        $queryOptions = [];
-        $project = $input->getOption('project');
-        if ($project !== false) {
-            $queryOptions['jql'] = urlencode('project = ' . $project);
-        }
-        $excludeTypes = $input->getOption('exclude');
-        if (!empty($excludeTypes)){
-            $queryOptions['jql'] = urlencode('issuetype not in (' . implode($excludeTypes, ',') . ')');
-        }
+        $jqlQueries = JqlGeneration::getJQlQueriesFromOptions($input->getOptions());
 
         $issueStatistics = $this->issueAggregationService->getSprintTicketStatistics(
             $activeSprint,
-            $queryOptions,
+            ['jql' => JqlGeneration::combineQueries($jqlQueries)],
             true
         );
 

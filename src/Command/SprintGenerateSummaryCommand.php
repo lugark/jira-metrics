@@ -76,7 +76,6 @@ class SprintGenerateSummaryCommand extends Command
 
         /** @var Sprint $activeSprint */
         $activeSprint = $sprints[0];
-
         $jqlQueries = JqlGeneration::getJQlQueriesFromOptions($input->getOptions());
 
         $issueStatistics = $this->issueAggregationService->getSprintTicketStatistics(
