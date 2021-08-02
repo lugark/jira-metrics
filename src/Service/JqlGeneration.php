@@ -27,7 +27,7 @@ class JqlGeneration
                     );
                     break;
                 case self::OPTIONS_EXCLUDE_KEY:
-                    $jql->addInExpression(
+                    $jql->addNotInExpression(
                         JqlQuery::FIELD_TYPE,
                         $option
                     );
@@ -41,12 +41,16 @@ class JqlGeneration
 
     public static function getJQLQueryFromBoardConfig(Configuration $configuration, JqlQuery $jql=null): JqlQuery
     {
+        $prefix = JqlQuery::KEYWORD_AND . ' ';
         if (empty($jql)) {
             $jql = new JqlQuery();
+            $prefix = '';
         }
+
         if ($configuration->hasSubQuery()) {
-            $jql->addAnyExpression(JqlQuery::KEYWORD_AND . ' (' . $configuration->subQuery->query . ')');
+            $jql->addAnyExpression($prefix . '(' . $configuration->subQuery->query . ')');
         }
+
         return $jql;
     }
 }
