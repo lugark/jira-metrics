@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardIssueType;
 use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardStatus;
 use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardStatusDaily;
 use App\JiraStatistics\Output;
@@ -45,6 +46,7 @@ class BoardGenerateMetricsCommand extends Command
 
         $influxDbWriter->addStatisticsMapper(new StatisticsByBoardStatus());
         $influxDbWriter->addStatisticsMapper(new StatisticsByBoardStatusDaily());
+        $influxDbWriter->addStatisticsMapper(new StatisticsByBoardIssueType());
         $this->statisticOutput = new Output($influxDbWriter);
 
         parent::__construct();
