@@ -68,7 +68,13 @@ class BoardGenerateMetricsCommand extends Command
             'x',
             InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
             'Exclude the listed issue types',
-            []);
+            [])
+        ->addOption(
+            'max-age',
+            't',
+            InputOption::VALUE_OPTIONAL,
+            'Do not include tickets older than X days not changed')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
