@@ -24,10 +24,10 @@ class StatisticsByBoardIssueType implements MapperInterface, InfluxDBMapperInter
                 $count,
                 [
                     'group_name' => $issueStatistics->getIssueGroupName(),
-                    'issue-type' => $type
+                    'issue_type' => $type
                 ],
                 [],
-                strtotime('last monday')
+                strtotime('monday this week')
             );
         }
 
