@@ -2,21 +2,27 @@
 
 namespace App\Service;
 
+use App\Jira\Board\Configuration;
+use App\JiraStatistics\BoardStatistics;
 use App\JiraStatistics\IssueStatistic;
+use App\JiraStatistics\AbstractIssueStatistics;
 use App\JiraStatistics\SprintStatistics;
+use JiraRestApi\Board\BoardService;
 use JiraRestApi\Issue\Issue;
 use JiraRestApi\Sprint\Sprint;
 use JiraRestApi\Sprint\SprintService;
 
 class IssueAggregation
 {
-    /** @var SprintService  */
-    protected $sprintService;
+    protected SprintService $sprintService;
 
-    public function __construct(SprintService $sprintService, BoardConfigurationService $boardConfigurationService)
+    protected BoardService $boardService;
+
+    public function __construct(SprintService $sprintService, BoardService $boardService, BoardConfigurationService $boardConfigurationService)
     {
         $this->sprintService = $sprintService;
         $this->boardConfigService = $boardConfigurationService;
+        $this->boardService = $boardService;
     }
 
     public function getTicketStatisticsBySprint(int $sprintId, array $queryParams, bool $subtaskInTypeStats=false)
@@ -83,7 +89,7 @@ class IssueAggregation
             $queryParams
         );
 
-        $boardColumnMapping = $this->boardConfigService->getBoardColumnMapping($sprint->originBoardId);
+        $boardColumnMapping = $this->boardConfigService->fetchBoardColumnMapping($sprint->originBoardId);
 
         /** @var SprintStatistics $issueStats */
         $issueStats = new SprintStatistics($sprint, $boardColumnMapping);
@@ -104,6 +110,42 @@ class IssueAggregation
             );
         }
 
+        return $issueStats;
+    }
+
+    public function getBoardTicketStatistics(
+        Configuration $boardConfig,
+        array $queryParams,
+        bool $subtaskInTypeStats=false
+    ): AbstractIssueStatistics
+    {
+        $queryOptions = array_merge(
+            [
+                'fields' => urlencode('status,issuetype,parent'),
+            ],
+            $queryParams
+        );
+
+        $boardColumnMapping = $this->boardConfigService->getBoardColumnMapping($boardConfig);
+
+        /** @var AbstractIssueStatistics $issueStats */
+        $issueStats = new BoardStatistics($boardConfig, $boardColumnMapping);
+
+        /** @var Issue $issue */
+        foreach ($this->boardService->getBoardIssues($boardConfig->id, $queryOptions) as $issue) {
+            if ($issue->fields->issuetype->subtask && !$subtaskInTypeStats) {
+                continue;
+            }
+            $issueStats->addIssueStatistic(
+                new IssueStatistic(
+                    $issue->id,
+                    $issue->fields->issuetype->name,
+                    $issue->fields->status->name,
+                    $issue->fields->status->id,
+                    $issue->fields->created
+                )
+            );
+        }
         return $issueStats;
     }
 }

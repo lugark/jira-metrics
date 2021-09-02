@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Jira\Board\Configuration;
-use App\Jira\Board\Configuration\ColumnConfig\Column\MappingStatus;
+use App\Jira\Board\Configuration\ColumnConfig\MappingStatus;
 use JiraRestApi\AgileApiTrait;
 use JiraRestApi\Configuration\ConfigurationInterface;
 use JiraRestApi\JiraClient;
@@ -24,13 +24,18 @@ class BoardConfigurationService extends JiraClient
         $this->setupAPIUri();
     }
 
-    public function getBoardColumnMapping(int $boardId): array
+    public function fetchBoardColumnMapping(int $boardId): array
     {
         $config = $this->getBoardConfig($boardId);
         if (empty(($config))) {
             return [];
         }
 
+        return $this->getBoardColumnMapping($config);
+    }
+
+    public function getBoardColumnMapping(Configuration $config): array
+    {
         $columnMapping = [];
         /** @var Configuration\ColumnConfig\Column $column */
         foreach ($config->columnConfig->columns as $column) {

@@ -6,26 +6,28 @@ use App\JiraStatistics\IssueStatisticsInterface;
 use App\JiraStatistics\Mapper\MapperInterface;
 use InfluxDB\Point;
 
-
-class StatisticsByIssueStatus implements MapperInterface, InfluxDBMapperInterface
+class StatisticsByBoardIssueType implements MapperInterface, InfluxDBMapperInterface
 {
     use InfluxDBMapperTrait;
 
     public function __construct()
     {
-        $this->measurement = 'sprint_state_stats';
+        $this->measurement = 'board_issue_type_stats';
     }
 
     public function mapStatistics(IssueStatisticsInterface $issueStatistics): array
     {
         $points = [];
-        foreach ($issueStatistics->getIssueCountsByState() as $statusName => $count) {
+        foreach ($issueStatistics->getIssueCountsByType() as $type => $count) {
             $points[] = new Point(
                 $this->measurement,
                 $count,
-                ['status-name' => $statusName],
+                [
+                    'group_name' => $issueStatistics->getIssueGroupName(),
+                    'issue_type' => $type
+                ],
                 [],
-                time()
+                strtotime('monday this week')
             );
         }
 
