@@ -89,7 +89,7 @@ class BoardGenerateMetricsCommand extends Command
         $jql = JqlGeneration::getJQlQueriesFromOptions($input->getOptions());
         $jql = JqlGeneration::getJQLQueryFromBoardConfig($boardConfig, $jql);
         $jql->addExpression(JqlQuery::FIELD_STATUS, JqlQuery::OPERATOR_NOT_EQUALS, 'Backlog');
-dd($jql->getQuery());
+
         $style->writeln('Fetching Ticket Statistics....');
         $issueStatistics = $this->issueAggregationService->getBoardTicketStatistics(
             $boardConfig,
