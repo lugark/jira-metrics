@@ -60,16 +60,22 @@ class BoardGenerateMetricsCommand extends Command
             InputArgument::REQUIRED,
             'The id of the Jira Agile board');
         $this->addOption(
-            'project',
+            JqlGeneration::OPTIONS_PROJECT_KEY,
             'p',
             InputOption::VALUE_REQUIRED,
             'The project fetched tasks should belong to',
             false)
         ->addOption(
-            'exclude',
+            JqlGeneration::OPTIONS_EXCLUDE_KEY,
             'x',
             InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
             'Exclude the listed issue types',
+            [])
+        ->addOption(
+            JqlGeneration::OPTIONS_QUERY_KEY,
+            '',
+            InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+            'Add to the query with AND condition',
             []);
     }
 
@@ -83,7 +89,7 @@ class BoardGenerateMetricsCommand extends Command
         $jql = JqlGeneration::getJQlQueriesFromOptions($input->getOptions());
         $jql = JqlGeneration::getJQLQueryFromBoardConfig($boardConfig, $jql);
         $jql->addExpression(JqlQuery::FIELD_STATUS, JqlQuery::OPERATOR_NOT_EQUALS, 'Backlog');
-
+dd($jql->getQuery());
         $style->writeln('Fetching Ticket Statistics....');
         $issueStatistics = $this->issueAggregationService->getBoardTicketStatistics(
             $boardConfig,
