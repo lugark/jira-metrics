@@ -9,6 +9,7 @@ class JqlGeneration
 {
     const OPTIONS_PROJECT_KEY = 'project';
     const OPTIONS_EXCLUDE_KEY = 'exclude';
+    const OPTIONS_QUERY_KEY = 'query';
 
     public static function getJQlQueriesFromOptions(array $options, JqlQuery $jql=null): JqlQuery
     {
@@ -16,6 +17,7 @@ class JqlGeneration
             $jql = new JqlQuery();
         }
 
+        $queriesAdded = 0;
         foreach ($options as $key => $option) {
             if (empty($option)) continue;
 
@@ -25,16 +27,23 @@ class JqlGeneration
                         JqlQuery::FIELD_PROJECT,
                         JqlQuery::OPERATOR_EQUALS, $option,
                     );
+                    $queriesAdded++;
                     break;
                 case self::OPTIONS_EXCLUDE_KEY:
                     $jql->addNotInExpression(
                         JqlQuery::FIELD_TYPE,
                         $option
                     );
+                    $queriesAdded++;
                     break;
                 default:
                     break;
             }
+        }
+
+        if (!empty($options[self::OPTIONS_QUERY_KEY])) {
+            $prefix = $queriesAdded > 0 ? JqlQuery::KEYWORD_AND . ' ' : '';
+            $jql->addAnyExpression($prefix . $options[self::OPTIONS_QUERY_KEY][0]);
         }
         return $jql;
     }
