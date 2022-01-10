@@ -13,7 +13,7 @@ class MappingStatus implements \JsonSerializable
     /** @var string */
     public $self;
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return array_filter(get_object_vars($this), function ($var) {
             return !is_null($var);

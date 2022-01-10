@@ -10,7 +10,7 @@ class ConfigurationTest extends TestCase
     /** JsonMapper */
     public $jsonMapper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->jsonMapper = new \JsonMapper();
