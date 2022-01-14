@@ -34,14 +34,12 @@ class InfluxDB2Writer implements WriterInterface, MapperAwareInterface
     {
         $mappedData = [];
         foreach ($this->mapper as $mapper) {
-            foreach ($mappedData as $data) {
-                $this->getWriteApi()->write(
-                    $mapper->mapStatistics($statistics),
-                    self::DEFAULT_PRECISION,
-                    $this->bucket,
-                    $this->orga
-                );
-            }
+            $this->getWriteApi()->write(
+                $mapper->mapStatistics($statistics),
+                self::DEFAULT_PRECISION,
+                $this->bucket,
+                $this->orga
+            );
         }
     }
 

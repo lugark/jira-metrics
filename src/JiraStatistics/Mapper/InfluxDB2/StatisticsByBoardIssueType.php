@@ -4,7 +4,7 @@ namespace App\JiraStatistics\Mapper\InfluxDB2;
 
 use App\JiraStatistics\IssueStatisticsInterface;
 use App\JiraStatistics\Mapper\MapperInterface;
-use InfluxDB\Point;
+use InfluxDB2\Point;
 
 class StatisticsByBoardIssueType implements MapperInterface, InfluxDBMapperInterface
 {
@@ -19,7 +19,7 @@ class StatisticsByBoardIssueType implements MapperInterface, InfluxDBMapperInter
     {
         $points = [];
         foreach ($issueStatistics->getIssueCountsByType() as $type => $count) {
-            $points[] = \InfluxDB2\Point::measurement($this->measurement)
+            $points[] = Point::measurement($this->measurement)
                 ->addTag('group_name',  $issueStatistics->getIssueGroupName())
                 ->addTag('issue_type', $type)
                 ->addField('value', $count)
