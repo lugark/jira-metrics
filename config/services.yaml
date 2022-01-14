@@ -34,16 +34,36 @@ services:
         arguments:
             - '%env(INFLUXDB_HOST)%'
 
+    InfluxDB2\Client:
+        class: InfluxDB2\Client
+        arguments:
+            - { url: '%env(INFLUXDB2_URL)%', token: '%env(INFLUXDB2_TOKEN)%', bucket: '%env(INFLUXDB2_BUCKET)%', org: '%env(INFLUXDB2_ORGA)%'}
+
     App\JiraStatistics\Writer\InfluxDBWriter:
         class: App\JiraStatistics\Writer\InfluxDBWriter
         calls:
             - [setDbName, ['%env(INFLUXDB_NAME)%']]
         shared: false
 
+    influx2_writer.board_generate_metrics:
+        class: App\JiraStatistics\Writer\InfluxDB2Writer
+        calls:
+            - [setBucket,['%env(INFLUXDB2_BUCKET)%']]
+            - [setOrga, ['%env(INFLUXDB2_ORGA)%']]
+            - [addStatisticsMapper, ['@App\JiraStatistics\Mapper\InfluxDB2\StatisticsByBoardStatus']]
+            - [addStatisticsMapper, ['@App\JiraStatistics\Mapper\InfluxDB2\StatisticsByBoardStatusDaily']]
+            - [addStatisticsMapper, ['@App\JiraStatistics\Mapper\InfluxDB2\StatisticsByBoardIssueType']]
+        shared: false
+
     mysql_writer.sprint_summary_command:
         class: App\JiraStatistics\Writer\MysqlWriter
         calls:
             - [addStatisticsMapper, ['@App\JiraStatistics\Mapper\MySQL\SprintStatisticsMySQL']]
+
+    App\Command\BoardGenerateMetricsCommand:
+        class: App\Command\BoardGenerateMetricsCommand
+        arguments:
+            $influxDbWriter: '@influx2_writer.board_generate_metrics'
 
     App\Command\SprintGenerateSummaryCommand:
         class: App\Command\SprintGenerateSummaryCommand

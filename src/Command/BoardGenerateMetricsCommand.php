@@ -6,15 +6,12 @@ use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardIssueType;
 use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardStatus;
 use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardStatusDaily;
 use App\JiraStatistics\Output;
-use App\JiraStatistics\Writer\InfluxDBWriter;
+use App\JiraStatistics\Writer\WriterInterface;
 use App\Service\BoardConfigurationService;
 use App\Service\IssueAggregation;
 use App\Service\JqlGeneration;
-use JiraRestApi\Board\Board;
 use JiraRestApi\Board\BoardService;
-use JiraRestApi\Issue\Issue;
 use JiraRestApi\Issue\JqlQuery;
-use JiraRestApi\Sprint\Sprint;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,15 +35,12 @@ class BoardGenerateMetricsCommand extends Command
     /** @var Output */
     private $statisticOutput;
 
-    public function __construct(IssueAggregation $issuesAggregation, InfluxDBWriter $influxDbWriter)
+    public function __construct(IssueAggregation $issuesAggregation, WriterInterface $influxDbWriter)
     {
         $this->issueAggregationService = $issuesAggregation;
         $this->boardService = new BoardService();
         $this->boardConfigService = new BoardConfigurationService();
 
-        $influxDbWriter->addStatisticsMapper(new StatisticsByBoardStatus());
-        $influxDbWriter->addStatisticsMapper(new StatisticsByBoardStatusDaily());
-        $influxDbWriter->addStatisticsMapper(new StatisticsByBoardIssueType());
         $this->statisticOutput = new Output($influxDbWriter);
 
         parent::__construct();
