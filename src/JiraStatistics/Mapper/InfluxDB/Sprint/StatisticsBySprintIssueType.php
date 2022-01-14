@@ -17,19 +17,19 @@ class StatisticsBySprintIssueType implements MapperInterface, InfluxDBMapperInte
         $this->measurement = 'sprint_issue_stats';
     }
 
-    public function mapStatistics(IssueStatisticsInterface $sprintStatistics): array
+    public function mapStatistics(IssueStatisticsInterface $issueStatistics): array
     {
         $points = [];
-        foreach ($sprintStatistics->getIssueCountsByType() as $type => $count) {
+        foreach ($issueStatistics->getIssueCountsByType() as $type => $count) {
             $points[] = new Point(
                 $this->measurement,
                 $count,
                 [
-                    'sprint-name' => $sprintStatistics->getSprintName(),
+                    'sprint-name' => $issueStatistics->getSprintName(),
                     'task-type' => $type
                 ],
                 [],
-                $sprintStatistics->getSprintStart()->getTimestamp()
+                $issueStatistics->getSprintStart()->getTimestamp()
             );
         }
 

@@ -53,7 +53,22 @@ services:
             - [addStatisticsMapper, ['@App\JiraStatistics\Mapper\InfluxDB2\StatisticsByBoardStatus']]
             - [addStatisticsMapper, ['@App\JiraStatistics\Mapper\InfluxDB2\StatisticsByBoardStatusDaily']]
             - [addStatisticsMapper, ['@App\JiraStatistics\Mapper\InfluxDB2\StatisticsByBoardIssueType']]
-        shared: false
+
+    influx2_writer.sprint_stats:
+        class: App\JiraStatistics\Writer\InfluxDB2Writer
+        calls:
+            - [setBucket,['%env(INFLUXDB2_BUCKET)%']]
+            - [setOrga, ['%env(INFLUXDB2_ORGA)%']]
+            - [addStatisticsMapper, ['@App\JiraStatistics\Mapper\InfluxDB2\Sprint\StatisticsBySprintIssueType']]
+            - [addStatisticsMapper, ['@App\JiraStatistics\Mapper\InfluxDB2\Sprint\StatisticsBySprint']]
+
+    influx2_writer.task_metrics:
+        class: App\JiraStatistics\Writer\InfluxDB2Writer
+        calls:
+            - [setBucket,['%env(INFLUXDB2_BUCKET)%']]
+            - [setOrga, ['%env(INFLUXDB2_ORGA)%']]
+            - [addStatisticsMapper, ['@App\JiraStatistics\Mapper\InfluxDB2\StatisticsByBoardStatus']]
+            - [addStatisticsMapper, ['@App\JiraStatistics\Mapper\InfluxDB2\StatisticsByBoardStatusDaily']]
 
     mysql_writer.sprint_summary_command:
         class: App\JiraStatistics\Writer\MysqlWriter
@@ -68,4 +83,10 @@ services:
     App\Command\SprintGenerateSummaryCommand:
         class: App\Command\SprintGenerateSummaryCommand
         arguments:
-            $mysqlWriter: '@mysql_writer.sprint_summary_command'
+            $influxDbWriter: '@influx2_writer.sprint_stats'
+            $mysqlWriter: null
+
+    App\Command\SprintGenerateMetricsCommand:
+        class: App\Command\SprintGenerateMetricsCommand
+        arguments:
+            $influxDbWriter: '@influx2_writer.task_metrics'

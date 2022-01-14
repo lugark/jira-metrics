@@ -6,7 +6,7 @@ use App\JiraStatistics\IssueStatisticsInterface;
 use App\JiraStatistics\Mapper\InfluxDB\InfluxDBMapperInterface;
 use App\JiraStatistics\Mapper\InfluxDB\InfluxDBMapperTrait;
 use App\JiraStatistics\Mapper\MapperInterface;
-use InfluxDB\Point;
+use InfluxDB2\Point;
 
 class StatisticsBySprintIssueType implements MapperInterface, InfluxDBMapperInterface
 {
@@ -17,23 +17,15 @@ class StatisticsBySprintIssueType implements MapperInterface, InfluxDBMapperInte
         $this->measurement = 'sprint_issue_stats';
     }
 
-    public function mapStatistics(IssueStatisticsInterface $sprintStatistics): array
+    public function mapStatistics(IssueStatisticsInterface $issueStatistics): array
     {
-        return [];
-        /** TODO - new  mapping */
-
         $points = [];
-        foreach ($sprintStatistics->getIssueCountsByType() as $type => $count) {
-            $points[] = new Point(
-                $this->measurement,
-                $count,
-                [
-                    'sprint-name' => $sprintStatistics->getSprintName(),
-                    'task-type' => $type
-                ],
-                [],
-                $sprintStatistics->getSprintStart()->getTimestamp()
-            );
+        foreach ($issueStatistics->getIssueCountsByType() as $type => $count) {
+            $points[] = Point::measurement($this->measurement)
+                ->addTag('sprint-name' , $issueStatistics->getSprintName())
+                ->addTag('task-type', $type)
+                ->addField('value', $count)
+                ->time($issueStatistics->getSprintStart()->getTimestamp());
         }
 
         return $points;

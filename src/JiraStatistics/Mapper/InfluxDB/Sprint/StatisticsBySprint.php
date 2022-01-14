@@ -17,19 +17,19 @@ class StatisticsBySprint implements MapperInterface, InfluxDBMapperInterface
         $this->measurement = 'sprint_stats';
     }
 
-    public function mapStatistics(IssueStatisticsInterface $sprintStatistics): array
+    public function mapStatistics(IssueStatisticsInterface $issueStatistics): array
     {
         return [new Point(
             $this->measurement,
             null,
-            ['sprint-name' => $sprintStatistics->getSprintName()],
+            ['sprint-name' => $issueStatistics->getSprintName()],
             [
-                'sprint-goal' => $sprintStatistics->getSprintGoal(),
+                'sprint-goal' => $issueStatistics->getSprintGoal(),
                 #TODO: add more numbers - total tasks - done / not done - number types of tasks
                 'tasks-start' => 0,
                 'tasks-end' => 0,
             ],
-            $sprintStatistics->getSprintStart()->getTimestamp()
+            $issueStatistics->getSprintStart()->getTimestamp()
         )];
     }
 }
