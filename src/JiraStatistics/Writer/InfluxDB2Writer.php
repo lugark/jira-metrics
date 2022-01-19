@@ -26,13 +26,11 @@ class InfluxDB2Writer implements WriterInterface, MapperAwareInterface
 
     public function __construct(Client $client)
     {
-        var_dump($client->options);
         $this->influxClient = $client;
     }
 
     public function writeData(IssueStatisticsInterface $statistics)
     {
-        $mappedData = [];
         foreach ($this->mapper as $mapper) {
             $this->getWriteApi()->write(
                 $mapper->mapStatistics($statistics),

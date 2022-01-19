@@ -23,8 +23,7 @@ class StatisticsBySprintIssueType implements MapperInterface, InfluxDBMapperInte
         foreach ($issueStatistics->getIssueCountsByType() as $type => $count) {
             $points[] = Point::measurement($this->measurement)
                 ->addTag('sprint-name' , $issueStatistics->getSprintName())
-                ->addTag('task-type', $type)
-                ->addField('value', $count)
+                ->addField($type, $count)
                 ->time($issueStatistics->getSprintStart()->getTimestamp());
         }
 
