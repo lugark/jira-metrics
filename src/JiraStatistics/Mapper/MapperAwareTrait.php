@@ -6,7 +6,7 @@ trait MapperAwareTrait
     /**
      * @var MapperInterface[]
      */
-    private $mapper;
+    private $mapper = [];
 
     public function addStatisticsMapper(MapperInterface $mapper)
     {

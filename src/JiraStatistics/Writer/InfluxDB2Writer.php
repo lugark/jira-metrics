@@ -20,9 +20,9 @@ class InfluxDB2Writer implements WriterInterface, MapperAwareInterface
 
     private WriteApi $writeApi;
 
-    private string $bucket;
+    private string $bucket='';
 
-    private string $orga;
+    private string $orga='';
 
     public function __construct(Client $client)
     {
