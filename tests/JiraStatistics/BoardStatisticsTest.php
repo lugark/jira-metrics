@@ -18,4 +18,5 @@ class BoardStatisticsTest extends TestCase
         $this->assertEquals('TestBoard', $sut->getIssueGroupName());
         $this->assertEquals(99, $sut->getIssueGroupId());
     }
+
 }
