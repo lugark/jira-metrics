@@ -8,7 +8,7 @@ class ColumnConfig implements \JsonSerializable
     use ClassSerialize;
 
     /** @var ColumnConfig\Column[]|null */
-    public $columns;
+    public $columns = [];
 
     public function jsonSerialize()
     {

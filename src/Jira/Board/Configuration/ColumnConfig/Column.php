@@ -11,7 +11,7 @@ class Column implements \JsonSerializable
     public $name;
 
     /** @var MappingStatus[] */
-    public $statuses;
+    public $statuses = [];
 
     public function jsonSerialize()
     {
