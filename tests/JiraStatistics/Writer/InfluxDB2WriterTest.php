@@ -47,6 +47,8 @@ class InfluxDB2WriterTest extends TestCase
             ->method('createWriteApi');
 
         $sut = new InfluxDB2Writer($this->clientApiMock);
+        $sut->setBucket('TestBucket');
+        $sut->setOrga('TestOrga');
         $sut->writeData($this->statsMock);
     }
 
