@@ -11,7 +11,7 @@ on:
 
 jobs:
   tests:
-    uses: lugark/jira-metrics/.github/workflows/PhpUnit.yml@9-support-for-influxdb-2x
+    uses: lugark/jira-metrics/.github/workflows/PhpUnit.yml@master
   codecov:
     needs: tests
     runs-on: ubuntu-latest
