@@ -1,0 +1,5 @@
+{
+    "template": "keepachangelog",
+    "unreleased": false,
+    "commitLimit": 0
+}
