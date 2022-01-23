@@ -21,18 +21,18 @@ class SprintStatisticsMySQL implements MapperInterface, MySQLMapperInterface
         $this->sprintRepository = $sprintRepository;
     }
 
-    public function mapStatistics(IssueStatisticsInterface $sprintStatistics): array
+    public function mapStatistics(IssueStatisticsInterface $issueStatistics): array
     {
-        $sprint = $this->sprintRepository->find($sprintStatistics->getSprintId());
+        $sprint = $this->sprintRepository->find($issueStatistics->getSprintId());
         if (empty($sprint)) {
             $sprint = new Sprint();
-            $sprint->setId($sprintStatistics->getSprintId())
-                ->setGoal($sprintStatistics->getSprintGoal())
-                ->setStartDate($sprintStatistics->getSprintStart())
-                ->setTitle($sprintStatistics->getSprintName());
+            $sprint->setId($issueStatistics->getSprintId())
+                ->setGoal($issueStatistics->getSprintGoal())
+                ->setStartDate($issueStatistics->getSprintStart())
+                ->setTitle($issueStatistics->getSprintName());
         }
 
-        $totalCount = $this->setSprintIssueTypeStatistics($sprint, $sprintStatistics->getIssueCountsByType());
+        $totalCount = $this->setSprintIssueTypeStatistics($sprint, $issueStatistics->getIssueCountsByType());
         $sprint->setIssueCount($totalCount);
 
         return [$sprint];
