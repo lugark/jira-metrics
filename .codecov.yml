@@ -2,7 +2,10 @@ coverage:
   round: nearest
   precision: 0
 
-comment: off
+comment:
+  layout: "diff"
+  require_changes: true
+  behavior: default
 
 ignore:
   - "public"
