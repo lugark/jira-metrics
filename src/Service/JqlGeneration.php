@@ -19,7 +19,9 @@ class JqlGeneration
 
         $queriesAdded = 0;
         foreach ($options as $key => $option) {
-            if (empty($option)) continue;
+            if (empty($option)) {
+                continue;
+            }
 
             switch ($key) {
                 case self::OPTIONS_PROJECT_KEY:

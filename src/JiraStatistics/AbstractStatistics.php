@@ -49,6 +49,7 @@ abstract class AbstractStatistics implements StatisticsInterface, AggregatorAwar
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public function getIssueCountsByType(): array
     {
@@ -63,6 +64,7 @@ abstract class AbstractStatistics implements StatisticsInterface, AggregatorAwar
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public function getIssueCountsByState(): array
     {
@@ -77,6 +79,7 @@ abstract class AbstractStatistics implements StatisticsInterface, AggregatorAwar
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public function getIssueCountByTypeAndState(): array
     {
@@ -98,6 +101,7 @@ abstract class AbstractStatistics implements StatisticsInterface, AggregatorAwar
 
     /**
      * @deprecated
+     * @codeCoverageIgnore
      */
     public function getCountsByBoardColumns(): array
     {
@@ -122,4 +126,5 @@ abstract class AbstractStatistics implements StatisticsInterface, AggregatorAwar
         }
 
         return $result;
-    }}
+    }
+}

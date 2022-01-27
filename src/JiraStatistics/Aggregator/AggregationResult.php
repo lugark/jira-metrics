@@ -4,8 +4,6 @@ namespace App\JiraStatistics\Aggregator;
 
 class AggregationResult implements \Iterator, \Countable
 {
-    private $position = 0;
-
     /** @var AggregationItem[] */
     private $results = [];
 

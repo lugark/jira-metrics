@@ -56,7 +56,7 @@ class ConfigurationTest extends TestCase
         $this->assertInstanceOf(Configuration\ColumnConfig\MappingStatus::class, $columnSerializable['statuses'][0]);
 
         $mappingSerializable = $columnSerializable['statuses'][0]->jsonSerialize();
-        $this->assertEquals($mappingSerializable['id'], 1122);
+        $this->assertEquals(1122, $mappingSerializable['id']);
 
     }
 
