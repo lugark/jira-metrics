@@ -2,7 +2,7 @@
 
 namespace App\JiraStatistics\Mapper\InfluxDB;
 
-use App\JiraStatistics\IssueStatisticsInterface;
+use App\JiraStatistics\StatisticsInterface;
 use App\JiraStatistics\Mapper\MapperInterface;
 use InfluxDB\Point;
 
@@ -15,7 +15,7 @@ class StatisticsByBoardIssueType implements MapperInterface, InfluxDBMapperInter
         $this->measurement = 'board_issue_type_stats';
     }
 
-    public function mapStatistics(IssueStatisticsInterface $issueStatistics): array
+    public function mapStatistics(StatisticsInterface $issueStatistics): array
     {
         $points = [];
         foreach ($issueStatistics->getIssueCountsByType() as $type => $count) {

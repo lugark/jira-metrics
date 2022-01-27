@@ -3,7 +3,7 @@
 namespace App\Tests\JiraStatistics;
 
 use App\Jira\Board\Configuration;
-use App\JiraStatistics\AbstractIssueStatistics;
+use App\JiraStatistics\AbstractStatistics;
 use App\JiraStatistics\BoardStatistics;
 use PHPUnit\Framework\TestCase;
 
@@ -21,7 +21,7 @@ class AbastractIssueStatisticsTest extends TestCase
 
     public function testNewInstance()
     {
-        $sut = $this->getMockForAbstractClass(AbstractIssueStatistics::class);
+        $sut = $this->getMockForAbstractClass(AbstractStatistics::class);
         $this->assertEmpty($sut->getIssueCountsByType());
     }
 

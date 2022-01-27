@@ -3,6 +3,7 @@
 namespace App\Tests\Jira\Board;
 
 use App\Jira\Board\Configuration;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
 class ConfigurationTest extends TestCase
@@ -21,6 +22,8 @@ class ConfigurationTest extends TestCase
      * @covers \App\Jira\Board\Configuration\ColumnConfig
      * @covers \App\Jira\Board\Configuration\ColumnConfig\Column
      * @covers \App\Jira\Board\Configuration\ColumnConfig\MappingStatus
+     * @covers \App\Jira\Board\Estimation
+     * @covers \App\Jira\Board\Estimation\Field
      */
     public function testConfigMapping()
     {
@@ -35,6 +38,14 @@ class ConfigurationTest extends TestCase
         $this->assertEquals('scrum', $configSerializable['type']);
         $this->assertInstanceOf(Configuration\ColumnConfig::class, $configSerializable['columnConfig']);
 
+        Assert::assertTrue($configuration->hasEstimation());
+        $estimationSerializable = $configSerializable['estimation']->jsonSerialize();
+        Assert::assertEquals(2, count($estimationSerializable));
+        Assert::assertEquals('field', $estimationSerializable['type']);
+        $estimationFieldSerializable = $estimationSerializable['field']->jsonSerialize();
+        Assert::assertEquals('customfield_12345', $estimationFieldSerializable['fieldId']);
+        Assert::assertEquals('Story Points', $estimationFieldSerializable['displayName']);
+
         $columnConfigSerializable = $configSerializable['columnConfig']->jsonSerialize();
         $this->assertEquals(5, count($columnConfigSerializable['columns']));
         $this->assertInstanceOf(Configuration\ColumnConfig\Column::class, $columnConfigSerializable['columns'][0]);
@@ -46,6 +57,7 @@ class ConfigurationTest extends TestCase
 
         $mappingSerializable = $columnSerializable['statuses'][0]->jsonSerialize();
         $this->assertEquals($mappingSerializable['id'], 1122);
+
     }
 
 }

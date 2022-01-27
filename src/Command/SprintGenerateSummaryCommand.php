@@ -9,7 +9,7 @@ use App\JiraStatistics\Writer\InfluxDBWriter;
 use App\JiraStatistics\Output;
 use App\JiraStatistics\Writer\MysqlWriter;
 use App\JiraStatistics\Writer\WriterInterface;
-use App\Service\IssueAggregation;
+use App\Service\IssueSelectionService;
 use App\Service\JqlGeneration;
 use JiraRestApi\Board\BoardService;
 use JiraRestApi\Sprint\Sprint;
@@ -24,7 +24,7 @@ class SprintGenerateSummaryCommand extends Command
 {
     protected static $defaultName = 'jira:sprint:generate:sprint-stats';
 
-    /** @var IssueAggregation */
+    /** @var IssueSelectionService */
     protected $issueAggregationService;
 
     /** @var Output */
@@ -33,7 +33,7 @@ class SprintGenerateSummaryCommand extends Command
     /** @var BoardService */
     protected $boardService;
 
-    public function __construct(IssueAggregation $issuesAggregation, WriterInterface $influxDbWriter, MysqlWriter  $mysqlWriter=null)
+    public function __construct(IssueSelectionService $issuesAggregation, WriterInterface $influxDbWriter, MysqlWriter  $mysqlWriter=null)
     {
         $this->issueAggregationService = $issuesAggregation;
         $this->boardService = new BoardService();

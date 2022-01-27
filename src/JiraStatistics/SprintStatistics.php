@@ -4,7 +4,7 @@ namespace App\JiraStatistics;
 
 use JiraRestApi\Sprint\Sprint;
 
-class SprintStatistics extends AbstractIssueStatistics
+class SprintStatistics extends AbstractStatistics implements SprintStatisticsInterface
 {
     /** @var Sprint */
     private $sprint;

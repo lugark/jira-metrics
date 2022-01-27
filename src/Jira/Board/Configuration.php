@@ -1,6 +1,7 @@
 <?php
 namespace App\Jira\Board;
 
+use App\Jira\Board\Configuration\ColumnConfig;
 use App\Jira\Board\Configuration\Filter;
 use App\Jira\Board\Configuration\SubQuery;
 use JiraRestApi\ClassSerialize;
@@ -9,24 +10,21 @@ class Configuration implements \JsonSerializable
 {
     use ClassSerialize;
 
-    /** @var int */
-    public $id;
+    public int $id;
 
-    /** @var string */
-    public $self;
+    public string $self;
 
-    /** @var string */
-    public $name;
+    public string $name;
 
-    /** @var string */
-    public $type;
+    public string $type;
 
     public ?Filter $filter;
 
     public ?SubQuery $subQuery;
 
-    /** @var Configuration\ColumnConfig|null */
-    public $columnConfig;
+    public ?Estimation $estimation;
+
+    public ?ColumnConfig $columnConfig;
 
     public function jsonSerialize()
     {
@@ -43,5 +41,10 @@ class Configuration implements \JsonSerializable
     public function hasFilter(): bool
     {
         return !(empty($this->filter));
+    }
+
+    public function hasEstimation(): bool
+    {
+        return !(empty($this->estimation));
     }
 }

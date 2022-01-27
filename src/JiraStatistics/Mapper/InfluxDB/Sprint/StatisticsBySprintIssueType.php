@@ -2,7 +2,7 @@
 
 namespace App\JiraStatistics\Mapper\InfluxDB\Sprint;
 
-use App\JiraStatistics\IssueStatisticsInterface;
+use App\JiraStatistics\StatisticsInterface;
 use App\JiraStatistics\Mapper\InfluxDB\InfluxDBMapperInterface;
 use App\JiraStatistics\Mapper\InfluxDB\InfluxDBMapperTrait;
 use App\JiraStatistics\Mapper\MapperInterface;
@@ -17,7 +17,7 @@ class StatisticsBySprintIssueType implements MapperInterface, InfluxDBMapperInte
         $this->measurement = 'sprint_issue_stats';
     }
 
-    public function mapStatistics(IssueStatisticsInterface $issueStatistics): array
+    public function mapStatistics(StatisticsInterface $issueStatistics): array
     {
         $points = [];
         foreach ($issueStatistics->getIssueCountsByType() as $type => $count) {

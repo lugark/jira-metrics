@@ -2,9 +2,9 @@
 
 namespace App\JiraStatistics\Mapper;
 
-use App\JiraStatistics\IssueStatisticsInterface;
+use App\JiraStatistics\StatisticsInterface;
 
 interface MapperInterface
 {
-    public function mapStatistics(IssueStatisticsInterface $issueStatistics): array;
+    public function mapStatistics(StatisticsInterface $issueStatistics): array;
 }

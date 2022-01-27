@@ -2,9 +2,9 @@
 
 namespace App\JiraStatistics\Writer;
 
-use App\JiraStatistics\IssueStatisticsInterface;
+use App\JiraStatistics\StatisticsInterface;
 
 interface WriterInterface
 {
-    public function writeData(IssueStatisticsInterface $statistics);
+    public function writeData(StatisticsInterface $statistics);
 }

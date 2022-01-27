@@ -2,23 +2,20 @@
 
 namespace App\JiraStatistics\Mapper\InfluxDB2\Sprint;
 
-use App\JiraStatistics\IssueStatisticsInterface;
-use App\JiraStatistics\Mapper\InfluxDB\InfluxDBMapperInterface;
-use App\JiraStatistics\Mapper\InfluxDB\InfluxDBMapperTrait;
-use App\JiraStatistics\Mapper\MapperInterface;
+use App\JiraStatistics\StatisticsInterface;
 use InfluxDB2\Point;
 
-class StatisticsBySprint implements MapperInterface, InfluxDBMapperInterface
+class StatisticsBySprint extends AbstractSprintStatisticsMapper
 {
-    use InfluxDBMapperTrait;
 
     public function __construct()
     {
         $this->measurement = 'sprint_stats';
     }
 
-    public function mapStatistics(IssueStatisticsInterface $issueStatistics): array
+    public function mapStatistics(StatisticsInterface $issueStatistics): array
     {
+        $this->checkStatistics($issueStatistics);
         return [
             Point::measurement($this->measurement)
                 ->addTag('sprint-name', $issueStatistics->getSprintName())
