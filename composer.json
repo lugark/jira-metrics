@@ -25,7 +25,7 @@
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.30",
-        "symfony/phpunit-bridge": "^5.2"
+        "symfony/phpunit-bridge": "^6.0"
     },
     "config": {
         "preferred-install": {
