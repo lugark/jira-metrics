@@ -21,6 +21,8 @@ class IssueSelectionService
 
     protected BoardService $boardService;
 
+    protected BoardConfigurationService $boardConfigService;
+    
     public function __construct(SprintService $sprintService, BoardService $boardService, BoardConfigurationService $boardConfigurationService)
     {
         $this->sprintService = $sprintService;

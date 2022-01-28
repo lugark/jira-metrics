@@ -2,7 +2,6 @@
 
 namespace App\JiraStatistics;
 
-use App\JiraStatistics\Aggregator\AggregationItem;
 use App\JiraStatistics\Aggregator\AggregationResult;
 use App\JiraStatistics\Aggregator\AggregatorAwareInterface;
 use App\JiraStatistics\Aggregator\AggregatorAwareTrait;
