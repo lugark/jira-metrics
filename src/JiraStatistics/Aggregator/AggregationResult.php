@@ -12,26 +12,41 @@ class AggregationResult implements \Iterator, \Countable
         return current($this->results);
     }
 
+    /**
+     * @return void
+     */
     public function next()
     {
         next($this->results);
     }
 
+    /**
+     * @return mixed
+     */
     public function key()
     {
        return key($this->results);
     }
 
+    /**
+     * @return bool
+     */
     public function valid(): bool
     {
        return isset($this->results[key($this->results)]);
     }
 
+    /**
+     * @return void
+     */
     public function rewind()
     {
         reset($this->results);
     }
 
+    /**
+     * @return int
+     */
     public function count(): int
     {
         return count($this->results);

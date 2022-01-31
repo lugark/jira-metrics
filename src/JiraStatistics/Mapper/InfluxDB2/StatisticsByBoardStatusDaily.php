@@ -11,6 +11,7 @@ use InfluxDB2\Point;
 class StatisticsByBoardStatusDaily implements MapperInterface, InfluxDBMapperInterface
 {
     use InfluxDBMapperTrait;
+    use AggregationItemValidateTrait;
 
     public function __construct()
     {
@@ -21,7 +22,7 @@ class StatisticsByBoardStatusDaily implements MapperInterface, InfluxDBMapperInt
     {
         $points = [];
         foreach ($issueStatistics->getIssueNumbersByColumn() as $item) {
-            if (!$this->isValidAggregationItem($item)) {
+            if (!$this->isValidCountStoryPointItem($item)) {
                 continue;
             }
 
@@ -34,15 +35,5 @@ class StatisticsByBoardStatusDaily implements MapperInterface, InfluxDBMapperInt
                 ->time(strtotime('today'));
         }
         return $points;
-    }
-
-    private function isValidAggregationItem(AggregationItem $item): bool
-    {
-        $value = $item->getValue();
-        return (
-            is_array($value) &&
-            isset($value[IssueAggregator::AGGREGATION_COUNT]) &&
-            isset($value[IssueAggregator::AGGREGATION_STORYPOINT])
-        );
     }
 }
