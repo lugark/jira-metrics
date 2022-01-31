@@ -3,7 +3,6 @@
 namespace App\JiraStatistics\Mapper\InfluxDB2;
 
 use App\JiraStatistics\Aggregator\IssueCountAggregator;
-use App\JiraStatistics\IssueStatisticsInterface;
 use App\JiraStatistics\Mapper\MapperInterface;
 use App\JiraStatistics\StatisticsInterface;
 use InfluxDB2\Point;

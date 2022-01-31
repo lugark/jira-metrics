@@ -14,6 +14,9 @@ class Field implements \JsonSerializable
     /** @var string */
     public $displayName;
 
+    /**
+     * @return array|mixed
+     */
     public function jsonSerialize()
     {
         return array_filter(get_object_vars($this), function ($var) {

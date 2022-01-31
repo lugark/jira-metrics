@@ -126,4 +126,23 @@ abstract class AbstractStatistics implements StatisticsInterface, AggregatorAwar
 
         return $result;
     }
+
+    public function getIssueNumbersByColumn(): AggregationResult
+    {
+        $result = new AggregationResult();
+
+        foreach ($this->issueData as $statistic) {
+            $columnName = $this->boardColumnMapping[$statistic->getStatusId()];
+            $value = $result->getValueByKey(
+                $columnName,
+                [IssueAggregator::AGGREGATION_COUNT => 0, IssueAggregator::AGGREGATION_STORYPOINT => 0.0]
+            );
+            $value[IssueAggregator::AGGREGATION_COUNT]++;
+            $value[IssueAggregator::AGGREGATION_STORYPOINT] += $statistic->getEstimation();
+            $result->setValueByKey($columnName, $value);
+        }
+
+        return $result;
+    }
+
 }

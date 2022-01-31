@@ -5,6 +5,7 @@ use App\Jira\Board\Configuration\ColumnConfig;
 use App\Jira\Board\Configuration\Filter;
 use App\Jira\Board\Configuration\SubQuery;
 use JiraRestApi\ClassSerialize;
+use phpDocumentor\Reflection\Types\Mixed_;
 
 class Configuration implements \JsonSerializable
 {
@@ -26,6 +27,9 @@ class Configuration implements \JsonSerializable
 
     public ?ColumnConfig $columnConfig;
 
+    /**
+     * @return array|mixed
+     */
     public function jsonSerialize()
     {
         return array_filter(get_object_vars($this), function ($var) {

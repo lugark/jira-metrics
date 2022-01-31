@@ -2,10 +2,6 @@
 
 namespace App\Command;
 
-use App\JiraStatistics\Mapper\InfluxDB\Sprint\StatisticsBySprint;
-use App\JiraStatistics\Mapper\InfluxDB\Sprint\StatisticsBySprintIssueType;
-use App\JiraStatistics\Mapper\MySQL\SprintStatisticsMySQL;
-use App\JiraStatistics\Writer\InfluxDBWriter;
 use App\JiraStatistics\Output;
 use App\JiraStatistics\Writer\MysqlWriter;
 use App\JiraStatistics\Writer\WriterInterface;

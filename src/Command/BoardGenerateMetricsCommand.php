@@ -2,9 +2,6 @@
 
 namespace App\Command;
 
-use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardIssueType;
-use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardStatus;
-use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardStatusDaily;
 use App\JiraStatistics\Output;
 use App\JiraStatistics\Writer\WriterInterface;
 use App\Service\BoardConfigurationService;

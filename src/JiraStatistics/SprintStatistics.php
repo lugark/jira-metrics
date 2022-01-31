@@ -25,7 +25,7 @@ class SprintStatistics extends AbstractStatistics implements SprintStatisticsInt
         return new \DateTime($this->sprint->startDate);
     }
 
-    public function getSprintGoal(): string
+    public function getSprintGoal(): ?string
     {
         return $this->sprint->goal;
     }

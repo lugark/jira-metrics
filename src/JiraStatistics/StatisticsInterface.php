@@ -11,6 +11,7 @@ interface StatisticsInterface
     public function getIssueGroupName(): string;
     public function getIssueGroupId(): int;
 
+    public function getIssueNumbersByColumn(): AggregationResult;
     public function getIssueCountByColumn(): AggregationResult;
 
     /** @deprecated  */

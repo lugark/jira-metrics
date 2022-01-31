@@ -10,6 +10,9 @@ class ColumnConfig implements \JsonSerializable
     /** @var ColumnConfig\Column[]|null */
     public $columns = [];
 
+    /**
+     * @return array|mixed
+     */
     public function jsonSerialize()
     {
         return array_filter(get_object_vars($this), function ($var) {
