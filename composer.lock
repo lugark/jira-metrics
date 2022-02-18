@@ -1624,12 +1624,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\": "src/"
-                },
                 "files": [
                     "src/functions_include.php"
-                ]
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1905,25 +1905,25 @@
         },
         {
             "name": "influxdata/influxdb-client-php",
-            "version": "2.5.0",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/influxdata/influxdb-client-php.git",
-                "reference": "6f7ab9d0485ac79b74a7823ded88ad75a16cf05c"
+                "reference": "a352b2beaca08e72b09bfd6f9e4c2a4817dd9483"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/influxdata/influxdb-client-php/zipball/6f7ab9d0485ac79b74a7823ded88ad75a16cf05c",
-                "reference": "6f7ab9d0485ac79b74a7823ded88ad75a16cf05c",
+                "url": "https://api.github.com/repos/influxdata/influxdb-client-php/zipball/a352b2beaca08e72b09bfd6f9e4c2a4817dd9483",
+                "reference": "a352b2beaca08e72b09bfd6f9e4c2a4817dd9483",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
                 "ext-mbstring": "*",
-                "guzzlehttp/guzzle": "^6.2|^7.0.1",
-                "guzzlehttp/psr7": "^1.7|^2.0.0",
-                "php": ">=7.1"
+                "guzzlehttp/guzzle": "^7.0.1",
+                "guzzlehttp/psr7": "^2.0.0",
+                "php": ">=7.2"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.4|^9.1",
@@ -1946,9 +1946,9 @@
             ],
             "support": {
                 "issues": "https://github.com/influxdata/influxdb-client-php/issues",
-                "source": "https://github.com/influxdata/influxdb-client-php/tree/2.5.0"
+                "source": "https://github.com/influxdata/influxdb-client-php/tree/2.6.0"
             },
-            "time": "2022-01-20T08:58:31+00:00"
+            "time": "2022-02-18T07:49:19+00:00"
         },
         {
             "name": "influxdb/influxdb-php",
