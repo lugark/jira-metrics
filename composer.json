@@ -12,7 +12,7 @@
         "doctrine/doctrine-bundle": "^2.3",
         "doctrine/doctrine-migrations-bundle": "^3.1",
         "doctrine/orm": "^2.11",
-        "influxdata/influxdb-client-php": "^2.4",
+        "influxdata/influxdb-client-php": "^3.0",
         "influxdb/influxdb-php": "^1.15",
         "lesstif/php-jira-rest-client": "^3.1",
         "symfony/console": "5.4.*",
