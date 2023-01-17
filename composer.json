@@ -22,7 +22,7 @@
         "symfony/framework-bundle": "5.4.*",
         "symfony/proxy-manager-bridge": "5.4.*",
         "symfony/runtime": "5.4.*",
-        "symfony/yaml": "5.4.*"
+        "symfony/yaml": "6.2.*"
     },
     "require-dev": {
         "rector/rector": "^0.15.7",
