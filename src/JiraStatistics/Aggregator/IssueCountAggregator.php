@@ -14,6 +14,7 @@ class IssueCountAggregator extends AbstractAggregator
     {
         return self::NAME;
     }
+
     private function aggregateByField(string $getter, $payload): AggregationResult
     {
         $result = new AggregationResult();

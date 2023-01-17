@@ -19,7 +19,7 @@ class StatisticsByBoardIssueType implements MapperInterface, InfluxDBMapperInter
     public function mapStatistics(StatisticsInterface $issueStatistics): array
     {
         $points = [];
-        $aggregationResult = $issueStatistics->aggregate('IssueCount', IssueCountAggregator::COUNT_BY_TYPE);
+        $aggregationResult = $issueStatistics->aggregate(IssueCountAggregator::NAME, IssueCountAggregator::COUNT_BY_TYPE);
         foreach ($aggregationResult as $item) {
             $points[] = Point::measurement($this->measurement)
                 ->addTag('group_name',  $issueStatistics->getIssueGroupName())
