@@ -12,20 +12,14 @@ class InfluxDBWriter implements WriterInterface, MapperAwareInterface
 {
     use MapperAwareTrait;
 
-    const DEFAULT_PRECISION = Database::PRECISION_SECONDS;
+    final const DEFAULT_PRECISION = Database::PRECISION_SECONDS;
 
-    /** @var Client */
-    private $influxClient;
+    private ?\InfluxDB\Database $db = null;
 
-    /** @var Database */
-    private $db;
+    private ?string $dbName = null;
 
-    /** @var string */
-    private $dbName;
-
-    public function __construct(Client $client)
+    public function __construct(private readonly Client $influxClient)
     {
-        $this->influxClient = $client;
     }
 
     public function writeData(IssueStatisticsInterface $statistics)

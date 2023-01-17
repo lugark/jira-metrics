@@ -7,9 +7,9 @@ use JiraRestApi\Issue\JqlQuery;
 
 class JqlGeneration
 {
-    const OPTIONS_PROJECT_KEY = 'project';
-    const OPTIONS_EXCLUDE_KEY = 'exclude';
-    const OPTIONS_QUERY_KEY = 'query';
+    final const OPTIONS_PROJECT_KEY = 'project';
+    final const OPTIONS_EXCLUDE_KEY = 'exclude';
+    final const OPTIONS_QUERY_KEY = 'query';
 
     public static function getJQlQueriesFromOptions(array $options, JqlQuery $jql=null): JqlQuery
     {

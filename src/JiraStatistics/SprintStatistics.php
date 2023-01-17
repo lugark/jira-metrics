@@ -6,12 +6,8 @@ use JiraRestApi\Sprint\Sprint;
 
 class SprintStatistics extends AbstractIssueStatistics
 {
-    /** @var Sprint */
-    private $sprint;
-
-    public function __construct(Sprint $sprint, array $boardColumnMapping=[], array $issueData=[])
+    public function __construct(private readonly Sprint $sprint, array $boardColumnMapping=[], array $issueData=[])
     {
-        $this->sprint = $sprint;
         parent::__construct($boardColumnMapping, $issueData);
     }
 

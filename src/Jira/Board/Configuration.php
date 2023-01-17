@@ -21,18 +21,16 @@ class Configuration implements \JsonSerializable
     /** @var string */
     public $type;
 
-    public ?Filter $filter;
+    public ?Filter $filter = null;
 
-    public ?SubQuery $subQuery;
+    public ?SubQuery $subQuery = null;
 
     /** @var Configuration\ColumnConfig|null */
     public $columnConfig;
 
     public function jsonSerialize()
     {
-        return array_filter(get_object_vars($this), function ($var) {
-            return !is_null($var);
-        });
+        return array_filter(get_object_vars($this), fn($var) => !is_null($var));
     }
 
     public function hasSubQuery(): bool

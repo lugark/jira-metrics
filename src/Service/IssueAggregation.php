@@ -14,15 +14,9 @@ use JiraRestApi\Sprint\SprintService;
 
 class IssueAggregation
 {
-    protected SprintService $sprintService;
-
-    protected BoardService $boardService;
-
-    public function __construct(SprintService $sprintService, BoardService $boardService, BoardConfigurationService $boardConfigurationService)
+    public function __construct(protected SprintService $sprintService, protected BoardService $boardService, BoardConfigurationService $boardConfigurationService)
     {
-        $this->sprintService = $sprintService;
         $this->boardConfigService = $boardConfigurationService;
-        $this->boardService = $boardService;
     }
 
     public function getTicketStatisticsBySprint(int $sprintId, array $queryParams, bool $subtaskInTypeStats=false)

@@ -7,11 +7,8 @@ use JiraRestApi\Sprint\Sprint;
 
 class BoardStatistics extends AbstractIssueStatistics
 {
-    protected Configuration $boardConfig;
-
-    public function __construct(Configuration $boardConfig, array $boardColumnMapping=[], array $issueData=[])
+    public function __construct(protected Configuration $boardConfig, array $boardColumnMapping=[], array $issueData=[])
     {
-        $this->boardConfig = $boardConfig;
         parent::__construct($boardColumnMapping, $issueData);
     }
 

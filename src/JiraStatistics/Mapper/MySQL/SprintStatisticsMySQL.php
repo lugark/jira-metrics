@@ -13,12 +13,8 @@ class SprintStatisticsMySQL implements MapperInterface, MySQLMapperInterface
 {
     use MySQLDBMapperTrait;
 
-    /** @var SprintRepository */
-    private $sprintRepository;
-
-    public function __construct(SprintRepository $sprintRepository)
+    public function __construct(private readonly SprintRepository $sprintRepository)
     {
-        $this->sprintRepository = $sprintRepository;
     }
 
     public function mapStatistics(IssueStatisticsInterface $issueStatistics): array

@@ -15,8 +15,6 @@ class MappingStatus implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        return array_filter(get_object_vars($this), function ($var) {
-            return !is_null($var);
-        });
+        return array_filter(get_object_vars($this), fn($var) => !is_null($var));
     }
 }

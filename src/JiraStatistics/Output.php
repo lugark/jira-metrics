@@ -7,7 +7,7 @@ use App\JiraStatistics\Writer\WriterInterface;
 class Output
 {
     /** @var WriterInterface[] */
-    private $writer;
+    private ?array $writer = null;
 
     public function __construct(WriterInterface $writer=null)
     {

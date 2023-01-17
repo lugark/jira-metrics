@@ -12,7 +12,6 @@ class ConfigurationTest extends TestCase
 
     public function setUp(): void
     {
-        parent::setUp();
         $this->jsonMapper = new \JsonMapper();
     }
 
@@ -36,12 +35,12 @@ class ConfigurationTest extends TestCase
         $this->assertInstanceOf(Configuration\ColumnConfig::class, $configSerializable['columnConfig']);
 
         $columnConfigSerializable = $configSerializable['columnConfig']->jsonSerialize();
-        $this->assertEquals(5, count($columnConfigSerializable['columns']));
+        $this->assertEquals(5, is_countable($columnConfigSerializable['columns']) ? count($columnConfigSerializable['columns']) : 0);
         $this->assertInstanceOf(Configuration\ColumnConfig\Column::class, $columnConfigSerializable['columns'][0]);
 
         $columnSerializable = $columnConfigSerializable['columns'][0]->jsonSerialize();
         $this->assertEquals('To Do', $columnSerializable['name']);
-        $this->assertEquals(3, count($columnSerializable['statuses']));
+        $this->assertEquals(3, is_countable($columnSerializable['statuses']) ? count($columnSerializable['statuses']) : 0);
         $this->assertInstanceOf(Configuration\ColumnConfig\MappingStatus::class, $columnSerializable['statuses'][0]);
 
         $mappingSerializable = $columnSerializable['statuses'][0]->jsonSerialize();
