@@ -5,7 +5,7 @@ namespace App\JiraStatistics;
 use App\Jira\Board\Configuration;
 use JiraRestApi\Sprint\Sprint;
 
-class BoardStatistics extends AbstractIssueStatistics
+class BoardStatistics extends AbstractStatistics
 {
     protected Configuration $boardConfig;
 

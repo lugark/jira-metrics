@@ -2,12 +2,9 @@
 
 namespace App\Command;
 
-use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardStatus;
-use App\JiraStatistics\Mapper\InfluxDB\StatisticsByBoardStatusDaily;
 use App\JiraStatistics\Output;
-use App\JiraStatistics\Writer\InfluxDBWriter;
 use App\JiraStatistics\Writer\WriterInterface;
-use App\Service\IssueAggregation;
+use App\Service\IssueSelectionService;
 use App\Service\JqlGeneration;
 use JiraRestApi\Board\BoardService;
 use JiraRestApi\Sprint\Sprint;
@@ -23,7 +20,7 @@ class SprintGenerateMetricsCommand extends Command
     // the name of the command (the part after "bin/console")
     protected static $defaultName = 'jira:sprint:generate:task-metrics';
 
-    /** @var IssueAggregation */
+    /** @var IssueSelectionService */
     protected $issueAggregationService;
 
     /** @var BoardService */
@@ -32,7 +29,7 @@ class SprintGenerateMetricsCommand extends Command
     /** @var Output */
     private $statisticOutput;
 
-    public function __construct(IssueAggregation $issuesAggregation, WriterInterface $influxDbWriter)
+    public function __construct(IssueSelectionService $issuesAggregation, WriterInterface $influxDbWriter)
     {
         $this->issueAggregationService = $issuesAggregation;
         $this->boardService = new BoardService();

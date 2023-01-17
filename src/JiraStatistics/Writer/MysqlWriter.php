@@ -2,7 +2,7 @@
 
 namespace App\JiraStatistics\Writer;
 
-use App\JiraStatistics\IssueStatisticsInterface;
+use App\JiraStatistics\StatisticsInterface;
 use App\JiraStatistics\Mapper\MapperAwareInterface;
 use App\JiraStatistics\Mapper\MapperAwareTrait;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +19,7 @@ class MysqlWriter implements WriterInterface, MapperAwareInterface
         $this->entityManager = $entityManager;
     }
 
-    public function writeData(IssueStatisticsInterface $statistics)
+    public function writeData(StatisticsInterface $statistics)
     {
         foreach ($this->mapper as $mapper) {
             $entities = $mapper->mapStatistics($statistics);

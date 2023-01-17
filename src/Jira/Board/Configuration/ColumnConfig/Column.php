@@ -13,6 +13,9 @@ class Column implements \JsonSerializable
     /** @var MappingStatus[] */
     public $statuses = [];
 
+    /**
+     * @return array|mixed
+     */
     public function jsonSerialize()
     {
         return array_filter(get_object_vars($this), function ($var) {

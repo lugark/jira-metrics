@@ -2,7 +2,7 @@
 
 namespace App\JiraStatistics\Writer;
 
-use App\JiraStatistics\IssueStatisticsInterface;
+use App\JiraStatistics\StatisticsInterface;
 use App\JiraStatistics\Mapper\MapperAwareInterface;
 use App\JiraStatistics\Mapper\MapperAwareTrait;
 use InfluxDB2\Client;
@@ -29,7 +29,7 @@ class InfluxDB2Writer implements WriterInterface, MapperAwareInterface
         $this->influxClient = $client;
     }
 
-    public function writeData(IssueStatisticsInterface $statistics)
+    public function writeData(StatisticsInterface $statistics)
     {
         foreach ($this->mapper as $mapper) {
             $this->getWriteApi()->write(

@@ -21,7 +21,7 @@ class Output
         $this->writer[] = $writer;
     }
 
-    public function output(IssueStatisticsInterface $statistics)
+    public function output(StatisticsInterface $statistics)
     {
         foreach ($this->writer as $writer) {
             $writer->writeData($statistics);

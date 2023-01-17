@@ -4,20 +4,25 @@ namespace App\Service;
 
 use App\Jira\Board\Configuration;
 use App\JiraStatistics\BoardStatistics;
-use App\JiraStatistics\IssueStatistic;
-use App\JiraStatistics\AbstractIssueStatistics;
+use App\JiraStatistics\IssueInformation;
+use App\JiraStatistics\AbstractStatistics;
 use App\JiraStatistics\SprintStatistics;
 use JiraRestApi\Board\BoardService;
 use JiraRestApi\Issue\Issue;
 use JiraRestApi\Sprint\Sprint;
 use JiraRestApi\Sprint\SprintService;
 
-class IssueAggregation
+class IssueSelectionService
 {
+    const DEFAULT_FIELDS_TO_FETCH='status,issuetype,parent';
+    const DEFAULT_MAX_RESULT=100;
+
     protected SprintService $sprintService;
 
     protected BoardService $boardService;
 
+    protected BoardConfigurationService $boardConfigService;
+    
     public function __construct(SprintService $sprintService, BoardService $boardService, BoardConfigurationService $boardConfigurationService)
     {
         $this->sprintService = $sprintService;
@@ -29,7 +34,7 @@ class IssueAggregation
     {
         $queryOptions = array_merge(
             [
-            'fields' => urlencode('status,issuetype,parent')
+            'fields' => urlencode(self::DEFAULT_FIELDS_TO_FETCH)
             ],
             $queryParams
         );
@@ -67,24 +72,19 @@ class IssueAggregation
         return $parent->fields->issuetype->name;
     }
 
-    private function getBoardColumnMapping(int $boardId)
-    {
-        $config = $this->boardConfigService->getBoardConfig($boardId);
-        if (!empty(($config))) {
-            return $config->columnConfig;
-        }
-        return [];
-    }
-
     public function getSprintTicketStatistics(
         Sprint $sprint,
         array $queryParams,
         bool $subtaskInTypeStats=false
     ): SprintStatistics {
+        $boardConfig = $this->boardConfigService->getBoardConfig($sprint->originBoardId);
+        $estimationField = $boardConfig->estimation->field->fieldId;
+        $fieldsToGet = self::DEFAULT_FIELDS_TO_FETCH;
+        $fieldsToGet .= $boardConfig->hasEstimation() ? ',' . $estimationField : '';
         $queryOptions = array_merge(
             [
-                'fields' => urlencode('status,issuetype,parent'),
-                'maxResults' => 100
+                'fields' => urlencode($fieldsToGet),
+                'maxResults' => self::DEFAULT_MAX_RESULT
             ],
             $queryParams
         );
@@ -99,13 +99,14 @@ class IssueAggregation
             if ($issue->fields->issuetype->subtask && !$subtaskInTypeStats) {
                 continue;
             }
-            $issueStats->addIssueStatistic(
-                new IssueStatistic(
+            $issueStats->addIssueInformation(
+                new IssueInformation(
                     $issue->id,
                     $issue->fields->issuetype->name,
                     $issue->fields->status->name,
                     $issue->fields->status->id,
-                    $issue->fields->created
+                    $issue->fields->created,
+                    $issue->fields->$estimationField ?? 0
                 )
             );
         }
@@ -117,18 +118,18 @@ class IssueAggregation
         Configuration $boardConfig,
         array $queryParams,
         bool $subtaskInTypeStats=false
-    ): AbstractIssueStatistics
+    ): AbstractStatistics
     {
         $queryOptions = array_merge(
             [
-                'fields' => urlencode('status,issuetype,parent'),
+                'fields' => urlencode(self::DEFAULT_FIELDS_TO_FETCH),
             ],
             $queryParams
         );
 
         $boardColumnMapping = $this->boardConfigService->getBoardColumnMapping($boardConfig);
 
-        /** @var AbstractIssueStatistics $issueStats */
+        /** @var AbstractStatistics $issueStats */
         $issueStats = new BoardStatistics($boardConfig, $boardColumnMapping);
 
         /** @var Issue $issue */
@@ -136,13 +137,14 @@ class IssueAggregation
             if ($issue->fields->issuetype->subtask && !$subtaskInTypeStats) {
                 continue;
             }
-            $issueStats->addIssueStatistic(
-                new IssueStatistic(
+            $issueStats->addIssueInformation(
+                new IssueInformation(
                     $issue->id,
                     $issue->fields->issuetype->name,
                     $issue->fields->status->name,
                     $issue->fields->status->id,
-                    $issue->fields->created
+                    $issue->fields->created,
+                    0
                 )
             );
         }

@@ -4,7 +4,7 @@ namespace App\JiraStatistics;
 
 use JiraRestApi\Sprint\Sprint;
 
-class SprintStatistics extends AbstractIssueStatistics
+class SprintStatistics extends AbstractStatistics implements SprintStatisticsInterface
 {
     /** @var Sprint */
     private $sprint;
@@ -25,7 +25,7 @@ class SprintStatistics extends AbstractIssueStatistics
         return new \DateTime($this->sprint->startDate);
     }
 
-    public function getSprintGoal(): string
+    public function getSprintGoal(): ?string
     {
         return $this->sprint->goal;
     }
