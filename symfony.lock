@@ -87,9 +87,6 @@
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.3"
     },
-    "graham-campbell/result-type": {
-        "version": "v1.0.1"
-    },
     "guzzlehttp/guzzle": {
         "version": "6.5.2"
     },
@@ -125,9 +122,6 @@
     },
     "php": {
         "version": "7.4"
-    },
-    "phpoption/phpoption": {
-        "version": "1.7.5"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -319,9 +313,6 @@
     },
     "symfony/yaml": {
         "version": "v5.0.7"
-    },
-    "vlucas/phpdotenv": {
-        "version": "v4.1.8"
     },
     "webimpress/safe-writer": {
         "version": "2.1.0"

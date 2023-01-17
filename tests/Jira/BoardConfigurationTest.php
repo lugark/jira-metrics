@@ -30,6 +30,5 @@ class BoardConfigurationServiceTest extends TestCase
         $column->statuses[0]->id = 99;
         $config->columnConfig->columns[] = $column;
         $mapping = $sut->getBoardColumnMapping($config);
-        var_dump($mapping);
     }
 }
