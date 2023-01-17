@@ -20,23 +20,23 @@ class SprintIssueTypeStatistic
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $IssueType;
+    private ?string $IssueType = null;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $Count;
+    private ?int $Count = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=Sprint::class, inversedBy="sprintIssueTypeStatistics")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Sprint;
+    private ?\App\Entity\Sprint $Sprint = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $StoryPoints;
+    private ?int $StoryPoints = null;
 
     public function getId(): ?int
     {

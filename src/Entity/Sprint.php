@@ -16,37 +16,37 @@ class Sprint
      * @ORM\Id
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $title;
+    private ?string $title = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $goal;
+    private ?string $goal = null;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $startDate;
+    private ?\DateTimeInterface $startDate = null;
 
     /**
      * @ORM\OneToMany(targetEntity=SprintIssueTypeStatistic::class, mappedBy="Sprint", orphanRemoval=true, cascade={"persist", "remove"})
      */
-    private $sprintIssueTypeStatistics;
+    private \Doctrine\Common\Collections\ArrayCollection|array $sprintIssueTypeStatistics;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $IssueCount;
+    private ?int $IssueCount = null;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $StoryPoints;
+    private ?int $StoryPoints = null;
 
     public function __construct()
     {

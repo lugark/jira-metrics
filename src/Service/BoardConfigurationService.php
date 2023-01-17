@@ -13,7 +13,7 @@ class BoardConfigurationService extends JiraClient
 {
     use AgileApiTrait;
 
-    private $uri = '/board/%d/configuration';
+    private string $uri = '/board/%d/configuration';
 
     public function __construct(
         ConfigurationInterface $configuration = null,

@@ -23,14 +23,11 @@ class SprintGenerateMetricsCommand extends Command
     // the name of the command (the part after "bin/console")
     protected static $defaultName = 'jira:sprint:generate:task-metrics';
 
-    /** @var IssueAggregation */
-    protected $issueAggregationService;
+    protected IssueAggregation $issueAggregationService;
 
-    /** @var BoardService */
-    protected $boardService;
+    protected BoardService $boardService;
 
-    /** @var Output */
-    private $statisticOutput;
+    private readonly Output $statisticOutput;
 
     public function __construct(IssueAggregation $issuesAggregation, WriterInterface $influxDbWriter)
     {

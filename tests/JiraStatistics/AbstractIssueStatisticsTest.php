@@ -11,12 +11,10 @@ class AbastractIssueStatisticsTest extends TestCase
 {
     public function setUp(): void
     {
-        parent::setUp();
     }
 
     public function tearDown(): void
     {
-        parent::tearDown();
     }
 
     public function testNewInstance()

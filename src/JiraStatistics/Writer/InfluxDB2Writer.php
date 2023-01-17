@@ -14,9 +14,7 @@ class InfluxDB2Writer implements WriterInterface, MapperAwareInterface
 {
     use MapperAwareTrait;
 
-    const DEFAULT_PRECISION = WritePrecision::S;
-
-    private Client $influxClient;
+    final const DEFAULT_PRECISION = WritePrecision::S;
 
     private WriteApi $writeApi;
 
@@ -24,9 +22,8 @@ class InfluxDB2Writer implements WriterInterface, MapperAwareInterface
 
     private string $orga='';
 
-    public function __construct(Client $client)
+    public function __construct(private readonly Client $influxClient)
     {
-        $this->influxClient = $client;
     }
 
     public function writeData(IssueStatisticsInterface $statistics)

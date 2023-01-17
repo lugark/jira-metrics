@@ -11,7 +11,7 @@ on:
 
 jobs:
   tests:
-    uses: lugark/jira-metrics/.github/workflows/PhpUnit.yml@master
+    uses: lugark/jira-metrics/.github/workflows/PhpUnit.yml@4e15c51e044b0823fe841f7676f510216e6b489e
 
   codecov:
     needs: tests
